@@ -9,7 +9,6 @@ add_executable(${PROJECT_NAME}
 		WIN32
 		${SOURCES}
 )
-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES LINK_FLAGS "/ENTRY:mainCRTStartup")
 set(ASSETS_PATH "$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/assets") 
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${ULTRA_BIN}" $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>) 

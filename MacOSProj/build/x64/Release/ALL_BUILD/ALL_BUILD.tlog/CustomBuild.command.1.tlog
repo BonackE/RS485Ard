@@ -1,0 +1,10 @@
+^C:\USERS\ELIJA\DESKTOP\SCHOOL STUFF\COMP SCI 372\RS485ARD\WINDOWSPROJ\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/elija/Desktop/School stuff/Comp Sci 372/RS485Ard/WindowsProj" "-BC:/Users/elija/Desktop/School stuff/Comp Sci 372/RS485Ard/WindowsProj/build" --check-stamp-file "C:/Users/elija/Desktop/School stuff/Comp Sci 372/RS485Ard/WindowsProj/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
