@@ -1,0 +1,3 @@
+C:/Users/elija/Desktop/School stuff/Comp Sci 372/RS485Ard/WindowsProj/build/CMakeFiles/ModbusDemo.dir
+C:/Users/elija/Desktop/School stuff/Comp Sci 372/RS485Ard/WindowsProj/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/elija/Desktop/School stuff/Comp Sci 372/RS485Ard/WindowsProj/build/CMakeFiles/ZERO_CHECK.dir
