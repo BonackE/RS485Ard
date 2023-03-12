@@ -9,14 +9,6 @@ add_executable(${PROJECT_NAME}
 		WIN32
 		${SOURCES}
 )
-set(ASSETS_PATH "$<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>/assets") 
-add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${ULTRA_BIN}" $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>) 
-add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${MODBUS_BIN}" $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>) 
-add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets/" "${ASSETS_PATH}")
-add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${ULTRA_RSC_DIR}" "${ASSETS_PATH}/resources")
-include_directories(${MODBUS_INCLUDES} ${ULTRA_INCLUDES})
-target_link_libraries(ModbusDemo PUBLIC modbus PUBLIC UltralightCore PUBLIC AppCore PUBLIC Ultralight PUBLIC WebCore)
+
+include_directories(${MODBUS_INCLUDES})
+target_link_libraries(ModbusDemo PUBLIC modbus ${wxWidgets_LIBRARIES})
