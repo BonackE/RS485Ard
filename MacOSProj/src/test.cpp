@@ -21,7 +21,7 @@
 #include "wx/dataobj.h"
 #include "wx/stopwatch.h"
 
-#include "../../sample.xpm"
+#include "sample.xpm"
 
 // ----------------------------------------------------------------------------
 // private classes
