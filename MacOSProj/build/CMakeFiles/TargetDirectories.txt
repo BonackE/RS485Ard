@@ -1,3 +1,0 @@
-/Users/elijahbonack/CompSci372/RS485Ard/MacOSProj/build/CMakeFiles/ModbusDemo.dir
-/Users/elijahbonack/CompSci372/RS485Ard/MacOSProj/build/CMakeFiles/edit_cache.dir
-/Users/elijahbonack/CompSci372/RS485Ard/MacOSProj/build/CMakeFiles/rebuild_cache.dir
