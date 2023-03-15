@@ -5,13 +5,71 @@
     body {
       font-family: -apple-system, 'Segoe UI Light', Ubuntu, Arial, sans-serif;
     }
+        .container {
+            padding: 0px;
+        }
+    
+        .sidebar {
+            width: 25%;
+            height: 100%;
+            position: absolute;
+            float: left;
+            background-color: #f5f5f5;
+            border-right: 1px solid #d8d8d8;
+            margin: -10px 20px 0px -10px;
+        }
+        
+        .sidebar ul {
+            list-style-type: none;
+        }
+        
+        .sidebar li {
+            font-size: 14px;
+            font-weight: 400;
+            color: #6d6d6d;
+            padding: 10px 20px;
+        }
+        
+        .sidebar li:hover {
+            background-color: #eaeaea;
+            color: #000;
+        }
+        
+        .content-container {
+            width: 75%;
+            float: right;
+        }
+        
+        .content {
+            padding: 10px;
+        }
+        
     </style>
   </head>
   <body>
-    <h1 id="inputReg"></h1>
-    <button onclick="readInput()">Press</button>
-    <script>
-        
-    </script>
+      <div class="container">
+          <div class="sidebar">
+                <ul>
+                    <h4>Devices</h4>
+                    <li>ListElement1</li>
+                <li>ListElement2</li>
+                <li>ListElement3</li></ul>
+          </div>
+          
+          <!---content area-->
+          <div class="content-container">
+              <div class="content">
+                  <h1 id="inputReg"></h1>
+                  <button onclick="readInput()">Press</button>
+              </div>
+          </div>
+      </div>
   </body>
 </html>
+
+<script>
+    function readInput() {
+        var myElement = document.getElementById("inputReg");
+        myElement.innerHTML = "Button Clicked.";
+    }
+</script>
