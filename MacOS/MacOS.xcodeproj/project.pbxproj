@@ -479,6 +479,7 @@
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = /Users/elijahbonack/CompSci372/RS485Ard/MacOS/MacOS/modbus_Bridge.h;
 				SWIFT_VERSION = 5.0;
 				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /opt/homebrew/Cellar/libmodbus/3.1.10/include/modbus;
+				a = a;
 			};
 			name = Debug;
 		};
@@ -513,6 +514,7 @@
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = /Users/elijahbonack/CompSci372/RS485Ard/MacOS/MacOS/modbus_Bridge.h;
 				SWIFT_VERSION = 5.0;
 				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /opt/homebrew/Cellar/libmodbus/3.1.10/include/modbus;
+				a = a;
 			};
 			name = Release;
 		};
