@@ -13,10 +13,14 @@
             width: 25%;
             height: 100%;
             position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             float: left;
             background-color: #f5f5f5;
             border-right: 1px solid #d8d8d8;
-            margin: -10px 20px 0px -10px;
         }
         
         .sidebar ul {
@@ -35,6 +39,26 @@
             color: #000;
         }
         
+        .add-device-button {
+            align-self: center;
+            margin-bottom: 16px;
+            padding: 7px 14px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f4f4f4;
+            color: #333;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: inset 0 -1px 0 rgba(0,0,0,0.12), 0 1px 1px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        
+        .add-device-button:hover {
+            background-color: #ebebeb;
+        }
+        
         .content-container {
             width: 75%;
             float: right;
@@ -46,21 +70,23 @@
         
     </style>
   </head>
-  <body>
+  <body onload="getJsonData()">
       <div class="container">
+          <!---side bar -->
           <div class="sidebar">
-                <ul>
-                    <h4>Devices</h4>
-                    <li>ListElement1</li>
-                <li>ListElement2</li>
-                <li>ListElement3</li></ul>
+              <ul id="device-list"></ul>
+              
+              <button class="add-device-button" onClick="AddNewDevice()">Add Device</button>
           </div>
           
           <!---content area-->
           <div class="content-container">
               <div class="content">
-                  <h1 id="inputReg"></h1>
+                  <h2 id="inputReg"></h2>
                   <button onclick="readInput()">Press</button>
+                  <div>
+                        <p id="test-out"></p>
+                  </div>
               </div>
           </div>
       </div>
@@ -68,8 +94,71 @@
 </html>
 
 <script>
+    window.onerror = (msg, url, line, column, error) => {
+        const message = {
+            message: msg,
+            url: url,
+            line: line,
+            column: column,
+            error: JSON.stringify(error)
+        }
+        
+        if (window.webkit) {
+            window.webkit.messageHandlers.error.postMessage(message);
+        } else {
+            console.log("Error:", message);
+        }
+    };
+    
+    var count = 0;
+
+    var devices = [{}];
+    
+    function getJsonData() {
+        if (window.webkit) {
+            window.webkit.messageHandlers.getJsonData.postMessage('');
+        } else {
+            var jsonStr = [
+                           {
+                               "name": "ListElement1",
+                               "type": "voltage"
+                           },
+                           {
+                               "name": "ListElement2",
+                               "type": "oxygen"
+                           },
+                           {
+                               "name": "ListElement3",
+                               "type": "algae"
+                           },
+                           {
+                               "name": "ListElement4",
+                               "type": "voltage"
+                           }
+                       ];
+            handleJsonData(jsonStr);
+        }
+    }
+    
+    function handleJsonData(jsonStr) {
+        devices = JSON.parse(jsonStr);
+        const list = document.getElementById("device-list");
+        
+        document.getElementById("test-out").innerHTML = devices.size ;
+        
+        // create list items
+        devices.forEach(item => {
+            const listItem = document.createElement('li');
+            listItem.textContent = item.name;
+            listItem.setAttribute('data-item', JSON.stringify(item));
+            list.appendChild(listItem);
+            count++;
+        });
+    }
+        
     function readInput() {
         var myElement = document.getElementById("inputReg");
         myElement.innerHTML = "Button Clicked.";
     }
+    
 </script>

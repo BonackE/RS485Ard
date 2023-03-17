@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB90625929C4DD36006F6BBD /* devices.json in Resources */ = {isa = PBXBuildFile; fileRef = EB90625829C4DD36006F6BBD /* devices.json */; };
 		EB9A8F6D29C22B3700CB4888 /* libmodbus.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */; };
 		EB9A8F6E29C22B3700CB4888 /* libmodbus.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		FF86141E29BFD8FA005A19DD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF86141D29BFD8FA005A19DD /* WebKit.framework */; };
@@ -52,6 +53,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EB90625829C4DD36006F6BBD /* devices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = devices.json; sourceTree = "<group>"; };
 		EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; name = libmodbus.dylib; path = ../../../../../usr/local/lib/libmodbus.dylib; sourceTree = "<group>"; };
 		FF86141D29BFD8FA005A19DD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		FF86141F29BFDAB3005A19DD /* app.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = app.html; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				FF908AF629BF7DFC00BCAA6C /* Assets.xcassets */,
 				FF908AFB29BF7DFC00BCAA6C /* MacOS.entitlements */,
 				FF908AF829BF7DFC00BCAA6C /* Preview Content */,
+				EB90625829C4DD36006F6BBD /* devices.json */,
 			);
 			path = MacOS;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				FF908AFA29BF7DFC00BCAA6C /* Preview Assets.xcassets in Resources */,
 				FF908AF729BF7DFC00BCAA6C /* Assets.xcassets in Resources */,
 				FF86142029BFDAB3005A19DD /* app.html in Resources */,
+				EB90625929C4DD36006F6BBD /* devices.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,12 +482,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = /Users/owner/projects/RS485Ard/MacOS/MacOS/modbus_Bridge.h;
 				SWIFT_VERSION = 5.0;
-
-				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /opt/homebrew/Cellar/libmodbus/3.1.10/include/modbus;
-				a = a;
-
 				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include/modbus;
-
+				a = a;
 			};
 			name = Debug;
 		};
@@ -517,9 +517,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = /Users/owner/projects/RS485Ard/MacOS/MacOS/modbus_Bridge.h;
 				SWIFT_VERSION = 5.0;
-				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /opt/homebrew/Cellar/libmodbus/3.1.10/include/modbus;
-				a = a;
 				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include/modbus;
+				a = a;
 			};
 			name = Release;
 		};
