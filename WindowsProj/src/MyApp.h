@@ -1,12 +1,15 @@
 #pragma once
 #include <AppCore/AppCore.h>
 
+#include <Ultralight/Ultralight.h>
+#include "JSModbusWrapper.h"
+
 using namespace ultralight;
 
 class MyApp : public AppListener,
               public WindowListener,
               public LoadListener,
-              public ViewListener {
+              public ViewListener{
 public:
   MyApp();
 
@@ -31,10 +34,10 @@ public:
                                const String& url) override;
 
   // This is called when the DOM has loaded in one of its frames.
-  virtual void OnDOMReady(ultralight::View* caller,
-                          uint64_t frame_id,
-                          bool is_main_frame,
-                          const String& url) override;
+  virtual void MyApp::OnDOMReady(ultralight::View* caller,
+      uint64_t frame_id,
+      bool is_main_frame,
+      const String& url) override;
 
   // This is called when the page requests to change the Cursor.
   virtual void OnChangeCursor(ultralight::View* caller,
@@ -43,8 +46,9 @@ public:
   virtual void OnChangeTitle(ultralight::View* caller,
     const String& title) override;
 
-protected:
   RefPtr<App> app_;
   RefPtr<Window> window_;
   RefPtr<Overlay> overlay_;
+
+
 };

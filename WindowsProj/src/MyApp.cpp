@@ -1,14 +1,32 @@
 #include "MyApp.h"
 
-#define WINDOW_WIDTH  600
-#define WINDOW_HEIGHT 400
+#define WINDOW_WIDTH  1200
+#define WINDOW_HEIGHT 600
+
+JSValueRef LoadPorts(JSContextRef ctx, JSObjectRef function,
+    JSObjectRef thisObject, size_t argumentCount,
+    const JSValueRef arguments[], JSValueRef* exception) {
+    
+    //Get current view of window
+	
+	//Get current window
+
+    
+    
+    return JSModbusWrapper::GetInstance().LoadPortsFunc(ctx);
+}
+JSValueRef Connect(JSContextRef ctx, JSObjectRef function,
+    JSObjectRef thisObject, size_t argumentCount,
+    const JSValueRef arguments[], JSValueRef* exception) {
+	return JSModbusWrapper::GetInstance().ConnectFunc(ctx);
+}
 
 MyApp::MyApp() {
   ///
   /// Create our main App instance.
   ///
   app_ = App::Create();
-
+  JSModbusWrapper& jsmodbus = JSModbusWrapper::GetInstance();
   ///
   /// Create a resizable window by passing by OR'ing our window flags with
   /// kWindowFlags_Resizable.
@@ -31,6 +49,8 @@ MyApp::MyApp() {
   /// Load a page into our overlay's View
   ///
   overlay_->view()->LoadURL("file:///app.html");
+
+  
 
   ///
   /// Register our MyApp instance as an AppListener so we can handle the
@@ -95,14 +115,37 @@ void MyApp::OnFinishLoading(ultralight::View* caller,
 }
 
 void MyApp::OnDOMReady(ultralight::View* caller,
-                       uint64_t frame_id,
-                       bool is_main_frame,
-                       const String& url) {
-  ///
-  /// This is called when a frame's DOM has finished loading on the page.
-  ///
-  /// This is the best time to setup any JavaScript bindings.
-  ///
+    uint64_t frame_id,
+    bool is_main_frame,
+    const String& url) {
+    RefPtr<JSContext> context = caller->LockJSContext();
+	//Send caller to JSModbusWrapper
+    
+
+    // Get the underlying JSContextRef for use with the
+    // JavaScriptCore C API.
+    JSContextRef ctx = *context.get();
+	JSModbusWrapper::GetInstance().SetView(caller);
+    // Create a JavaScript String containing the name of our callback.
+    JSStringRef name = JSStringCreateWithUTF8CString("LoadPorts");
+	JSStringRef name2 = JSStringCreateWithUTF8CString("Connect");
+    // Create a garbage-collected JavaScript function that is bound to our
+    // native C callback 'OnButtonClick()'.
+    JSObjectRef func = JSObjectMakeFunctionWithCallback(ctx, name,
+        LoadPorts);
+	JSObjectRef func2 = JSObjectMakeFunctionWithCallback(ctx, name2, Connect);
+
+    // Get the global JavaScript object (aka 'window')
+    JSObjectRef globalObj = JSContextGetGlobalObject(ctx);
+
+    // Store our function in the page's global JavaScript object so that it
+    // accessible from the page as 'OnButtonClick()'.
+    JSObjectSetProperty(ctx, globalObj, name, func, 0, 0);
+	JSObjectSetProperty(ctx, globalObj, name2, func2, 0, 0);
+
+    // Release the JavaScript String we created earlier.
+    JSStringRelease(name);
+	JSStringRelease(name2);
 }
 
 void MyApp::OnChangeCursor(ultralight::View* caller,
@@ -124,3 +167,8 @@ void MyApp::OnChangeTitle(ultralight::View* caller,
   ///
   window_->SetTitle(title.utf8().data());
 }
+
+
+
+
+
