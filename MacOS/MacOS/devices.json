@@ -1,0 +1,18 @@
+[
+    {
+        "name": "ListElement1",
+        "type": "voltage"
+    },
+    {
+        "name": "ListElement2",
+        "type": "oxygen"
+    },
+    {
+        "name": "ListElement3",
+        "type": "algae"
+    },
+    {
+        "name": "ListElement4",
+        "type": "voltage"
+    }
+]

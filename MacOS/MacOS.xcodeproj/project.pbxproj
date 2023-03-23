@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB90625929C4DD36006F6BBD /* devices.json in Resources */ = {isa = PBXBuildFile; fileRef = EB90625829C4DD36006F6BBD /* devices.json */; };
+		EB9A8F6D29C22B3700CB4888 /* libmodbus.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */; };
+		EB9A8F6E29C22B3700CB4888 /* libmodbus.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		FF86141E29BFD8FA005A19DD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF86141D29BFD8FA005A19DD /* WebKit.framework */; };
 		FF86142029BFDAB3005A19DD /* app.html in Resources */ = {isa = PBXBuildFile; fileRef = FF86141F29BFDAB3005A19DD /* app.html */; };
 		FF908AF329BF7DFC00BCAA6C /* MacOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF908AF229BF7DFC00BCAA6C /* MacOSApp.swift */; };
@@ -16,8 +19,6 @@
 		FF908B0529BF7DFD00BCAA6C /* MacOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF908B0429BF7DFD00BCAA6C /* MacOSTests.swift */; };
 		FF908B0F29BF7DFD00BCAA6C /* MacOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF908B0E29BF7DFD00BCAA6C /* MacOSUITests.swift */; };
 		FF908B1129BF7DFD00BCAA6C /* MacOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF908B1029BF7DFD00BCAA6C /* MacOSUITestsLaunchTests.swift */; };
-		FF908B1F29BF7EFB00BCAA6C /* libmodbus.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FF908B1E29BF7EFB00BCAA6C /* libmodbus.dylib */; };
-		FF908B2029BF7EFC00BCAA6C /* libmodbus.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = FF908B1E29BF7EFB00BCAA6C /* libmodbus.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +45,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				FF908B2029BF7EFC00BCAA6C /* libmodbus.dylib in Embed Libraries */,
+				EB9A8F6E29C22B3700CB4888 /* libmodbus.dylib in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -52,6 +53,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EB90625829C4DD36006F6BBD /* devices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = devices.json; sourceTree = "<group>"; };
+		EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; name = libmodbus.dylib; path = ../../../../../usr/local/lib/libmodbus.dylib; sourceTree = "<group>"; };
 		FF86141D29BFD8FA005A19DD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		FF86141F29BFDAB3005A19DD /* app.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = app.html; sourceTree = "<group>"; };
 		FF908AEF29BF7DFC00BCAA6C /* MacOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,7 +68,6 @@
 		FF908B0A29BF7DFD00BCAA6C /* MacOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MacOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF908B0E29BF7DFD00BCAA6C /* MacOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSUITests.swift; sourceTree = "<group>"; };
 		FF908B1029BF7DFD00BCAA6C /* MacOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		FF908B1E29BF7EFB00BCAA6C /* libmodbus.dylib */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; name = libmodbus.dylib; path = ../../../../../opt/homebrew/lib/libmodbus.dylib; sourceTree = "<group>"; };
 		FF908B2329BF85D100BCAA6C /* modbus_Bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = modbus_Bridge.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,8 +76,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EB9A8F6D29C22B3700CB4888 /* libmodbus.dylib in Frameworks */,
 				FF86141E29BFD8FA005A19DD /* WebKit.framework in Frameworks */,
-				FF908B1F29BF7EFB00BCAA6C /* libmodbus.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +129,7 @@
 				FF908AF629BF7DFC00BCAA6C /* Assets.xcassets */,
 				FF908AFB29BF7DFC00BCAA6C /* MacOS.entitlements */,
 				FF908AF829BF7DFC00BCAA6C /* Preview Content */,
+				EB90625829C4DD36006F6BBD /* devices.json */,
 			);
 			path = MacOS;
 			sourceTree = "<group>";
@@ -159,8 +162,8 @@
 		FF908B1D29BF7EFB00BCAA6C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */,
 				FF86141D29BFD8FA005A19DD /* WebKit.framework */,
-				FF908B1E29BF7EFB00BCAA6C /* libmodbus.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				FF908AFA29BF7DFC00BCAA6C /* Preview Assets.xcassets in Resources */,
 				FF908AF729BF7DFC00BCAA6C /* Assets.xcassets in Resources */,
 				FF86142029BFDAB3005A19DD /* app.html in Resources */,
+				EB90625929C4DD36006F6BBD /* devices.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,18 +471,18 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/homebrew/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
+				NEW_SETTING2 = "";
 				"OTHER_LDFLAGS[arch=*]" = "-lmodbus";
 				PRODUCT_BUNDLE_IDENTIFIER = Management.MacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = /Users/elijahbonack/CompSci372/RS485Ard/MacOS/MacOS/modbus_Bridge.h;
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = /Users/owner/projects/RS485Ard/MacOS/MacOS/modbus_Bridge.h;
 				SWIFT_VERSION = 5.0;
-				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /opt/homebrew/Cellar/libmodbus/3.1.10/include/modbus;
+				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include/modbus;
 				a = a;
 			};
 			name = Debug;
@@ -502,18 +506,18 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/homebrew/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "";
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /usr/local/lib;
 				MARKETING_VERSION = 1.0;
+				NEW_SETTING = "";
+				NEW_SETTING2 = "";
 				"OTHER_LDFLAGS[arch=*]" = "-lmodbus";
 				PRODUCT_BUNDLE_IDENTIFIER = Management.MacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = /Users/elijahbonack/CompSci372/RS485Ard/MacOS/MacOS/modbus_Bridge.h;
+				"SWIFT_OBJC_BRIDGING_HEADER[arch=*]" = /Users/owner/projects/RS485Ard/MacOS/MacOS/modbus_Bridge.h;
 				SWIFT_VERSION = 5.0;
-				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /opt/homebrew/Cellar/libmodbus/3.1.10/include/modbus;
+				"SYSTEM_HEADER_SEARCH_PATHS[arch=*]" = /usr/local/include/modbus;
 				a = a;
 			};
 			name = Release;
