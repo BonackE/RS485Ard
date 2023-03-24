@@ -89,8 +89,8 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     
     
 	
-    
-    std::string code = "var options = \"" + connectTest + "\";"
+    //Replace data[1] with slave ID using modbus_get_slave(modbus.ctx)
+    std::string code = "var options = \"" + connectTest + " " + data[1] + "\";"
         "document.getElementById('result').innerHTML = options;";
 
 	JSStringRef script = JSStringCreateWithUTF8CString(code.c_str());
