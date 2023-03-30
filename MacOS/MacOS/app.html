@@ -2,32 +2,31 @@
   <head>
     <title>MyApp -- (edit this title in app.html)</title>
     <style>
-    body {
-      font-family: -apple-system, 'Segoe UI Light', Ubuntu, Arial, sans-serif;
-    }
-        
-        
+      body {
+        font-family: -apple-system, 'Segoe UI Light', Ubuntu, Arial, sans-serif;
+      }
     </style>
   </head>
   <body onload="LoadPorts();">
+    <div class="parent-container">
+      <div class="toolbar">
+        <button onclick="GetOptions();">Connect</button>
+        <button onclick="LoadPorts();">Refresh Ports</button>
+      </div>
+      <div>
+        <div class="column">
+          <div class="contain">
+            <p class="section-header">Settings</p>
+            <div class="settingsContainer">
+              <div class="settings">
+                <label for="serialPorts">Serial Port</label>
 
-      <h2> Hello world!</h2>
-      <button onclick="Connect();">Connect</button>
-      <button onclick="LoadPorts();">Refresh Ports</button>
-      <div id="result"></div>
-      <div class="settingsContainer">
-          <div class="settings">
-              <label for="serialPorts">Serial Port</label>
-              
-              <select name="serialPorts" class="settingsLists">
+                <select name="serialPorts" class="settingsLists"></select>
+              </div>
+              <div class="settings">
+                <label for="baudRates">Baud</label>
 
-              </select>
-              
-          </div>
-          <div class="settings">
-              <label for="baudRates">Baud</label>
-              
-              <select name="baudRates" class="settingsLists">
+                <select name="baudRates" class="settingsLists">
                   <option value="1200">1200</option>
                   <option value="2400">2400</option>
                   <option value="4800">4800</option>
@@ -36,155 +35,361 @@
                   <option value="38400">38400</option>
                   <option value="57600">57600</option>
                   <option value="115200">115200</option>
-              </select>
-          </div>
-          <div class="settings">
-              <label for="dataBits">Data Bits</label>
-              
-              <select name="dataBits" class="settingsLists">
+                </select>
+              </div>
+              <div class="settings">
+                <label for="dataBits">Data Bits</label>
+
+                <select name="dataBits" class="settingsLists">
                   <option value="7">7</option>
                   <option value="8">8</option>
-              </select>
-          </div>
-          <div class="settings">
-              <label for="stopBits">Stop Bits</label>
-              
-              <select name="stopBits" class="settingsLists">
+                </select>
+              </div>
+              <div class="settings">
+                <label for="stopBits">Stop Bits</label>
+
+                <select name="stopBits" class="settingsLists">
                   <option value="0">0</option>
                   <option value="1">1</option>
-              </select>
-          </div>
-          <div class="settings">
-              <label for="parity">Parity</label>
-              
-              <select name="parity" class="settingsLists">
+                </select>
+              </div>
+              <div class="settings">
+                <label for="parity">Parity</label>
+
+                <select name="parity" class="settingsLists">
                   <option value="N">None</option>
                   <option value="E">Even</option>
                   <option value="O">Odd</option>
-              </select>
+                </select>
+              </div>
+            </div>
           </div>
-          
-          
-      
+
+          <div class="contain">
+            <p class="section-header">Modbus Request</p>
+
+            <div class="settingsContainer">
+              <div class="settings">
+                <label for="slave-id">Slave ID</label>
+                <select name="slave-id" class="modbus-req-lists"></select>
+              </div>
+              <div class="settings">
+                <label for="function-code">Function Code</label>
+                <select name="function-code" class="modbus-req-lists"></select>
+              </div>
+              <div class="settings">
+                <label for="start-addr">Start address</label>
+                <select name="start-addr" class="modbus-req-lists"></select>
+              </div>
+              <div class="settings">
+                <label for="num-coils">Num. coils</label>
+                <select name="num-coils" class="modbus-req-lists"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="contain">
+            <p class="section-header">Registers</p>
+            <div class="table-contain">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data type</th>
+                    <th>Register</th>
+                    <th>Data</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Row 1, Column 1 test test test</td>
+                    <td>R1C2</td>
+                    <td>Row 1, Column 3</td>
+                  </tr>
+                  <tr>
+                    <td>Row 2, Column 1</td>
+                    <td>R2C2</td>
+                    <td>Row 2, Column 3</td>
+                  </tr>
+                  <tr>
+                    <td>Row 3, Column 1</td>
+                    <td>R3C2</td>
+                    <td>Row 3, Column 3</td>
+                  </tr>
+
+                  <tr>
+                    <td>Row 1, Column 1 test test test</td>
+                    <td>R1C2</td>
+                    <td>Row 1, Column 3</td>
+                  </tr>
+                  <tr>
+                    <td>Row 2, Column 1</td>
+                    <td>R2C2</td>
+                    <td>Row 2, Column 3</td>
+                  </tr>
+                  <tr>
+                    <td>Row 3, Column 1</td>
+                    <td>R3C2</td>
+                    <td>Row 3, Column 3</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="contain">
+            <p class="section-header">Bus Monitor</p>
+            <div>
+              <p style="float: left">Raw Data Received:</p>
+              <button style="float: right">Clear</button>
+            </div>
+            <div class="table-contain">
+              <table>
+                <tbody>
+                  <tr></tr>
+                </tbody>
+              </table>
+            </div>
+            <br />
+            <div>
+              <p style="float: left">Modbus requests/responses:</p>
+              <button style="float: right">Clear</button>
+              <div class="table-contain">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>I/O</th>
+                      <th>Slave ID</th>
+                      <th>Function code</th>
+                      <th>Start address</th>
+                      <th>Num coils</th>
+                      <th>CRC</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  </body>
+  <style>
+    .column {
+      display: inline-block;
+      width: 45%;
+      vertical-align: top;
+      margin-right: 10px;
+      margin-bottom: 20px;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+    }
 
-      
-    </body>
+    .parent-container {
+      margin: 0 auto;
+      max-width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #eee;
+      text-align: center;
+    }
+    .contain {
+      border: inset 1px;
+      padding: 0px 3px 6px 3px;
+      margin: 10px;
+    }
+    .toolbar {
+      text-align: left;
+      margin: 10px;
+    }
 
+    .settingsContainer {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .settings {
+      padding: 0px 6px 0px 6px;
+    }
+
+    .section-header {
+      text-align: center;
+    }
+
+    .table-contain {
+      margin: 10px;
+      width: 100%;
+      height: 200px;
+      overflow: scroll;
+      padding: 3px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      padding: 10px;
+      display: block;
+      height: 180px;
+      border-collapse: collapse;
+      background-color: #ffffff;
+    }
+    th,
+    td {
+      padding: 7px 10px 10px 10px;
+      text-align: left;
+      font-size: smaller;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    tr {
+      width: 0.1%;
+      white-space: nowrap;
+    }
+
+    /* table {
+      width: 100%;
+      height: 200px;
+      table-layout: auto;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+    }
+    th {
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 60%;
+      border-bottom: 2px solid #111111;
+      text-align: center;
+    }
+    tbody {
+      border-collapse: collapse;
+      background-color: #ffffff;
+    }
+    td {
+      height: 10%;
+    } */
+  </style>
 </html>
 
 <script>
-    //read the select options as a string and return string
-    function GetOptions() {
-        var select = document.getElementsByClassName("settingsLists");
-        //create empty array to store the values
-        var result = "";
-        for (var i = 0; i < select.length; i++) {
-            result += select[i].value;
-            if(i != select.length - 1)
-                result += ",";
-        }
-        return result;
+  //read the select options as a string and return string
+  function GetOptions() {
+    var select = document.getElementsByClassName('settingsLists')
+    //create empty array to store the values
+    var result = ''
+    for (var i = 0; i < select.length; i++) {
+      result += select[i].value
+      if (i != select.length - 1) result += ','
     }
-
+    return result
+  }
 </script>
 
 <script>
-    window.onerror = (msg, url, line, column, error) => {
-        const message = {
-            message: msg,
-            url: url,
-            line: line,
-            column: column,
-            error: JSON.stringify(error)
-        }
-        
-        if (window.webkit) {
-            window.webkit.messageHandlers.error.postMessage(message);
-        } else {
-            console.log("Error:", message);
-        }
-    };
-    
-    var count = 0;
+  window.onerror = (msg, url, line, column, error) => {
+    const message = {
+      message: msg,
+      url: url,
+      line: line,
+      column: column,
+      error: JSON.stringify(error),
+    }
 
-    var devices = [{}];
-    
-    function getJsonData() {
-        if (window.webkit) {
-            window.webkit.messageHandlers.getJsonData.postMessage('');
-        } else {
-            var jsonStr = [
-                           {
-                               "name": "ListElement1",
-                               "type": "voltage"
-                           },
-                           {
-                               "name": "ListElement2",
-                               "type": "oxygen"
-                           },
-                           {
-                               "name": "ListElement3",
-                               "type": "algae"
-                           },
-                           {
-                               "name": "ListElement4",
-                               "type": "voltage"
-                           }
-                       ];
-            handleJsonData(jsonStr);
-        }
+    if (window.webkit) {
+      window.webkit.messageHandlers.error.postMessage(message)
+    } else {
+      console.log('Error:', message)
     }
-    
-    // populate listView element with raw data recieved
-    function handleJsonData(jsonStr) {
-        devices = JSON.parse(jsonStr);
-        const list = document.getElementById("device-list");
-        
-        document.getElementById("test-out").innerHTML = devices.size ;
-        
-        // create list items
-        devices.forEach(item => {
-            const listItem = document.createElement('li');
-            listItem.textContent = item.name;
-            listItem.setAttribute('data-item', JSON.stringify(item));
-            list.appendChild(listItem);
-            count++;
-        });
+  }
+
+  var count = 0
+
+  var devices = [{}]
+
+  function getJsonData() {
+    if (window.webkit) {
+      window.webkit.messageHandlers.getJsonData.postMessage('')
+    } else {
+      var jsonStr = [
+        {
+          name: 'ListElement1',
+          type: 'voltage',
+        },
+        {
+          name: 'ListElement2',
+          type: 'oxygen',
+        },
+        {
+          name: 'ListElement3',
+          type: 'algae',
+        },
+        {
+          name: 'ListElement4',
+          type: 'voltage',
+        },
+      ]
+      handleJsonData(jsonStr)
     }
-    
-    // call to Swift to LoadPorts()
-    function LoadPorts() {
-        var docPorts =  document.getElementsByName('serialPorts');
-        if (docPorts[0].options.length > 0) removeOptions(docPorts[0]);
-        
-        if (window.webkit) {
-            window.webkit.messageHandlers.LoadPorts.postMessage('');
-        }
+  }
+
+  // populate listView element with raw data recieved
+  function handleJsonData(jsonStr) {
+    devices = JSON.parse(jsonStr)
+    const list = document.getElementById('device-list')
+
+    document.getElementById('test-out').innerHTML = devices.size
+
+    // create list items
+    devices.forEach((item) => {
+      const listItem = document.createElement('li')
+      listItem.textContent = item.name
+      listItem.setAttribute('data-item', JSON.stringify(item))
+      list.appendChild(listItem)
+      count++
+    })
+  }
+
+  // call to Swift to LoadPorts()
+  function LoadPorts() {
+    var docPorts = document.getElementsByName('serialPorts')
+    if (docPorts[0].options.length > 0) removeOptions(docPorts[0])
+
+    if (window.webkit) {
+      window.webkit.messageHandlers.LoadPorts.postMessage('')
     }
-    
-    // refresh options list
-    function removeOptions(selectElement) {
-        var i, L = selectElement.options.length - 1;
-        for (i = L; i >= 0; i--) {
-            selectElement.remove(i);
-        }
+  }
+
+  // refresh options list
+  function removeOptions(selectElement) {
+    var i,
+      L = selectElement.options.length - 1
+    for (i = L; i >= 0; i--) {
+      selectElement.remove(i)
     }
-    
-    // called by WK with data to populate the webview
-    function handlePortsData(ports) {
-        var docPorts =  document.getElementsByName('serialPorts');
-        for(var i = 0; i < ports.length;i++){
-            var optn = document.createElement('OPTION');
-            optn.text = ports[i];
-            optn.value = ports[i];
-            docPorts[0].options.add(optn);
-        }
+  }
+
+  // called by WK with data to populate the webview
+  function handlePortsData(ports) {
+    var docPorts = document.getElementsByName('serialPorts')
+    for (var i = 0; i < ports.length; i++) {
+      var optn = document.createElement('OPTION')
+      optn.text = ports[i]
+      optn.value = ports[i]
+      docPorts[0].options.add(optn)
     }
-        
-    function readInput() {
-        var myElement = document.getElementById("inputReg");
-        myElement.innerHTML = "Button Clicked.";
-    }
-    
+  }
+
+  function readInput() {
+    var myElement = document.getElementById('inputReg')
+    myElement.innerHTML = 'Button Clicked.'
+  }
 </script>
