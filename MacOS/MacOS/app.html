@@ -136,6 +136,7 @@
         }
     }
     
+    // populate listView element with raw data recieved
     function handleJsonData(jsonStr) {
         devices = JSON.parse(jsonStr);
         const list = document.getElementById("device-list");
@@ -152,7 +153,7 @@
         });
     }
     
-    
+    // call to Swift to LoadPorts()
     function LoadPorts() {
         var docPorts =  document.getElementsByName('serialPorts');
         if (docPorts[0].options.length > 0) removeOptions(docPorts[0]);
@@ -162,6 +163,7 @@
         }
     }
     
+    // refresh options list
     function removeOptions(selectElement) {
         var i, L = selectElement.options.length - 1;
         for (i = L; i >= 0; i--) {
@@ -169,6 +171,7 @@
         }
     }
     
+    // called by WK with data to populate the webview
     function handlePortsData(ports) {
         var docPorts =  document.getElementsByName('serialPorts');
         for(var i = 0; i < ports.length;i++){
