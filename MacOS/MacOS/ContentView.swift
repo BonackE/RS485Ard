@@ -50,8 +50,10 @@ struct HTMLView: NSViewRepresentable {
         let userContentController = webView.configuration.userContentController
         userContentController.add(context.coordinator, name: "getJsonData")
         userContentController.add(context.coordinator, name: "error")
+        userContentController.add(context.coordinator, name: "console")
         userContentController.add(context.coordinator, name: "LoadPorts")
         userContentController.add(context.coordinator, name: "Connect")
+        
         
         return webView
     }
@@ -62,23 +64,43 @@ struct HTMLView: NSViewRepresentable {
             nsView.loadHTMLString(htmlString ?? "", baseURL: URL(string: "http://localhost/")!)
         }
     }
-    
+
     func makeCoordinator() -> Coordinator {
-        return Coordinator()
+        return Coordinator(modbus: Modbus())
     }
     
     class Coordinator: NSObject, WKScriptMessageHandler {
-//        let modbus = Modbus() // Store the modbus object as a member of the Coordinator
-//
-//        init(modbus: Modbus) {
-//            self.modbus = modbus
-//        }
+        var modbus = Modbus() // Store the modbus object as a member of the Coordinator
+
+        init(modbus: Modbus) {
+            super.init();
+        }
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+            // define a struct that matches the format of the JSON data
+            struct ModbusConfig : Codable {
+                let serialPort: String
+                let baudRate: Int32
+                let dataBits: Int32
+                let stopBits: Int32
+                let parity: CChar
+                let slaveId: Int32
+                let functionCode: Int32
+                let startAddr: Int32
+                let numCoils: Int32
+            }
+            
+            // display errors from HTMLView
             if message.name == "error" {
                 let error = (message.body as? [String: Any])?["message"] as? String ?? "unknown"
                 print("JavaScript error: \(error)")
             }
+            // display console output from HTMLView
+            if message.name == "console", let data = message.body as? String {
+                
+                print("JavaScript console: \(data)")
+            }
+            // load available serial ports
             if message.name == "LoadPorts", let webView = message.webView {
     
                 let ports = getSerialPorts()
@@ -92,10 +114,25 @@ struct HTMLView: NSViewRepresentable {
                         print("Result: \(result ?? "")")
                     }
                 }
-                
             }
-            if message.name == "Connect" {
-    
+            // connect to the modbus
+            if message.name == "Connect", let jsonString = message.body as? String {
+                
+                // use the 'JSONDecoder' class to decode the JSON data into the 'ModbusConfig' struct
+                let jsonData = jsonString.data(using: .utf8)!
+                print(jsonData)
+                let decoder = JSONDecoder()
+                do {
+                    let config = try decoder.decode(ModbusConfig.self, from: jsonData)
+                    modbus = Modbus(device: config.serialPort, baudRate: config.baudRate, parity: config.parity,
+                                    dataBits: config.dataBits, stopBits: config.stopBits)
+                    modbus_set_slave(modbus.modbus, config.slaveId)
+
+                } catch {
+                    print("Error decoding JSON data: \(error)")
+                }
+                
+
             }
         }
     }
