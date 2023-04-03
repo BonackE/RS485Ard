@@ -33,7 +33,7 @@ public:
                                bool is_main_frame,
                                const String& url) override;
 
-  // This is called when the DOM has loaded in one of its frames.
+  // This is called when the DOM has loaded in one of its frames.a
   virtual void MyApp::OnDOMReady(ultralight::View* caller,
       uint64_t frame_id,
       bool is_main_frame,
