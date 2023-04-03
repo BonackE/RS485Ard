@@ -73,7 +73,7 @@
             </div>
           </div>
 
-          <div class="contain">
+          <div id="registerRead" class="contain">
             <p class="section-header">Modbus Request</p>
 
             <div class="settingsContainer">
@@ -118,7 +118,7 @@
     
                     <input type="text" disabled="true" id="hex-data" style="width: max-width"></input>
                     <div style="float: right">
-                        <input type="submit" value="Send"></button>
+                        <button type="button" onclick="Requests()">Send</button>
                     </div>
             </div>
             </form>
@@ -127,7 +127,7 @@
           <div class="contain">
             <p class="section-header">Registers</p>
             <div class="table-contain">
-              <table>
+              <table id="dataTable">
                 <thead>
                   <tr>
                     <th>Data type</th>
@@ -136,7 +136,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    <tr></tr>
+                    
                 </tbody>
               </table>
             </div>

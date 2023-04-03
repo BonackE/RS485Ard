@@ -19,6 +19,7 @@ public:
 	void SetView(View* view);
 	JSValueRef LoadPortsFunc(JSContextRef ctx);
 	JSValueRef ConnectFunc(JSContextRef ctx);
+	JSValueRef RequestFunc(JSContextRef ctx);
 private:
 	JSModbusWrapper() {
 		modbus = ModbusFunctions();

@@ -147,3 +147,15 @@ function load(){
         }
       }
     }
+    function GetRequest(){
+      var request = "";
+
+      request += document.getElementById("slaveId").value+",";
+      request += document.getElementById("functionCode").value+",";
+
+      request += document.getElementById("startAddr").value+",";
+      request += document.getElementById("numCoils").value;
+      document.getElementById('result').innerHTML = request;
+      return request;
+
+    }

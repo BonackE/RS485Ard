@@ -1,4 +1,14 @@
-    .column {
+    #dataTable tbody td {
+  height: 2px; /* Set the height of the cells */
+	font-size: 2px;
+	line-height:1.2;
+	margin:0px;
+	padding: 1px;
+}
+#dataTable tbody tr{
+	height: 10px;
+}
+	.column {
       display: inline-block;
       width: 45%;
       vertical-align: top;
@@ -48,13 +58,7 @@
       font-size: 70%;
     }
 
-    .table-contain {
-      margin: 10px;
-      width: 95%;
-      height: 200px;
-      padding: 3px;
-      overflow: auto;
-    }
+
       
     .table-header {
         font-size: 80%;
@@ -66,34 +70,15 @@
         margin: 20px;
     }
 
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      padding: 10px;
-      display: block;
-      height: 180px;
-      border-collapse: collapse;
-      background-color: #ffffff;
-    }
+
       
-    th,
-    td {
-      padding: 7px 10px 10px 10px;
-      text-align: left;
-      font-size: smaller;
-      border-bottom: 1px solid #ddd;
-    }
+
 
     th {
       background-color: #f2f2f2;
     }
-    tr:hover {
-      background-color: #f5f5f5;
-    }
-    tr {
-      width: 0.1%;
-      white-space: nowrap;
-    }
+
+
 .custom-select {
   position: relative;
   font-family: Arial;
@@ -153,4 +138,5 @@
 .select-items div:hover, .same-as-selected {
   background-color: rgba(0, 0, 0, 0.1);
 }
+
 	

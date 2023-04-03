@@ -20,6 +20,11 @@ JSValueRef Connect(JSContextRef ctx, JSObjectRef function,
     const JSValueRef arguments[], JSValueRef* exception) {
 	return JSModbusWrapper::GetInstance().ConnectFunc(ctx);
 }
+JSValueRef Requests(JSContextRef ctx, JSObjectRef function,
+	JSObjectRef thisObject, size_t argumentCount,
+	const JSValueRef arguments[], JSValueRef* exception) {
+	return JSModbusWrapper::GetInstance().RequestFunc(ctx);
+}
 
 MyApp::MyApp() {
   ///
@@ -127,25 +132,28 @@ void MyApp::OnDOMReady(ultralight::View* caller,
     JSContextRef ctx = *context.get();
 	JSModbusWrapper::GetInstance().SetView(caller);
     // Create a JavaScript String containing the name of our callback.
-    JSStringRef name = JSStringCreateWithUTF8CString("LoadPorts");
-	JSStringRef name2 = JSStringCreateWithUTF8CString("Connect");
+    JSStringRef LoadPJ = JSStringCreateWithUTF8CString("LoadPorts");
+	JSStringRef ConnectJ = JSStringCreateWithUTF8CString("Connect");
+	JSStringRef RequestJ = JSStringCreateWithUTF8CString("Requests");
     // Create a garbage-collected JavaScript function that is bound to our
     // native C callback 'OnButtonClick()'.
-    JSObjectRef func = JSObjectMakeFunctionWithCallback(ctx, name,
-        LoadPorts);
-	JSObjectRef func2 = JSObjectMakeFunctionWithCallback(ctx, name2, Connect);
+    JSObjectRef LoadPJFunc = JSObjectMakeFunctionWithCallback(ctx,LoadPJ, LoadPorts);
+	JSObjectRef ConnectJFunc = JSObjectMakeFunctionWithCallback(ctx, ConnectJ, Connect);
+	JSObjectRef RequestJFunc = JSObjectMakeFunctionWithCallback(ctx, RequestJ, Requests);
 
     // Get the global JavaScript object (aka 'window')
     JSObjectRef globalObj = JSContextGetGlobalObject(ctx);
 
     // Store our function in the page's global JavaScript object so that it
     // accessible from the page as 'OnButtonClick()'.
-    JSObjectSetProperty(ctx, globalObj, name, func, 0, 0);
-	JSObjectSetProperty(ctx, globalObj, name2, func2, 0, 0);
+    JSObjectSetProperty(ctx, globalObj, LoadPJ, LoadPJFunc, 0, 0);
+	JSObjectSetProperty(ctx, globalObj, ConnectJ, ConnectJFunc, 0, 0);
+	JSObjectSetProperty(ctx, globalObj, RequestJ, RequestJFunc, 0, 0);
 
     // Release the JavaScript String we created earlier.
-    JSStringRelease(name);
-	JSStringRelease(name2);
+    JSStringRelease(LoadPJ);
+	JSStringRelease(ConnectJ);
+	JSStringRelease(RequestJ);
 }
 
 void MyApp::OnChangeCursor(ultralight::View* caller,

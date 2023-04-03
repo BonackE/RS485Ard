@@ -9,6 +9,7 @@ class ModbusFunctions
 public:
 	std::vector<std::string> getSerialPorts();
 	modbus_t* ctx;
+
 };
 
 #endif
