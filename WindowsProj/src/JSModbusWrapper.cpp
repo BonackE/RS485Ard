@@ -1,25 +1,30 @@
 #include "JSModbusWrapper.h"
+#include <cstdlib>
 using namespace ultralight;
 void JSModbusWrapper::SetView(View* view) {
     this->view = view;
 }
-JSValueRef JSModbusWrapper::LoadPortsFunc(JSContextRef ctx){
+JSValueRef JSModbusWrapper::LoadPortsFunc(JSContextRef ctx) {
 
     std::vector<std::string> ports = modbus.getSerialPorts();
-	
+
 
     // Create a JavaScript array and populate it with the port strings
     std::string code = "var ports = [\"";
     for (int i = 0; i < ports.size(); i++) {
-        
+
         code += ports[i];
-        if (i < ports.size()-1) {
+        if (i < ports.size() - 1) {
             code += "\",\"";
         }
     }
 
     code += "\"];"
-		"var docPorts =  document.getElementsByName('serialPorts');"
+        "var docPorts =  document.getElementsByName('serialPort');"
+        "if(docPorts[0].children.length > 0){"
+        "for(var i = 0; i < docPorts[0].children.length;i++){"
+		"docPorts[0].remove(0);}"
+        "}"
         "for(var i = 0; i < ports.length;i++){"
         "var optn = document.createElement('OPTION');"
         "optn.text = ports[i];"
@@ -27,12 +32,12 @@ JSValueRef JSModbusWrapper::LoadPortsFunc(JSContextRef ctx){
         "docPorts[0].options.add(optn);}";
 
     // Create our string of JavaScript and substitute the placeholder with the ports array
-    const char* str = code.c_str();
 
 
 
 
-    JSStringRef script = JSStringCreateWithUTF8CString(str);
+
+    JSStringRef script = JSStringCreateWithUTF8CString(code.c_str());
 
     // Create a JavaScript object that holds the `this` value
     JSObjectRef thisObj = JSObjectMake(ctx, nullptr, nullptr);
@@ -68,15 +73,17 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     std::string connectTest = "A";
 	//prepend a / to data[0] to make it a valid path
     
-    
+    //Attempt to make a new RTU context
     try {
     modbus.ctx = modbus_new_rtu(data[0].c_str(), stoi(data[1]), data[4][0], stoi(data[2]), stoi(data[3]));
     
     if (modbus.ctx == NULL) {
 		connectTest = "Unable to create the libmodbus context";
     }
-    if (modbus_connect(modbus.ctx) == -1) {
-        connectTest = "Failed to connected";
+    else if (modbus_connect(modbus.ctx) == -1) {
+		
+
+		connectTest = "Connection failed: " + std::string(modbus_strerror(errno));
         modbus_free(modbus.ctx);
     }
     else {
@@ -90,7 +97,7 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     
 	
     //Replace data[1] with slave ID using modbus_get_slave(modbus.ctx)
-    std::string code = "var options = \"" + connectTest + " " + data[1] + "\";"
+    std::string code = "var options = \"" + connectTest + "\";"
         "document.getElementById('result').innerHTML = options;";
 
 	JSStringRef script = JSStringCreateWithUTF8CString(code.c_str());

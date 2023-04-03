@@ -15,11 +15,15 @@ public:
 		static JSModbusWrapper instance;
 		return instance;
 	}
+	~JSModbusWrapper() {}
 	void SetView(View* view);
 	JSValueRef LoadPortsFunc(JSContextRef ctx);
 	JSValueRef ConnectFunc(JSContextRef ctx);
 private:
-	JSModbusWrapper() {}
+	JSModbusWrapper() {
+		modbus = ModbusFunctions();
+		view = nullptr;
+	}
 	JSModbusWrapper(const JSModbusWrapper& other) = delete;
 	JSModbusWrapper& operator=(const JSModbusWrapper& other) = delete;
 	ModbusFunctions modbus;
