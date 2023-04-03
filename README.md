@@ -11,7 +11,7 @@ Prerequisites:
 To install:
   1. Make a build directory in the main file.
   2. Run the following commands:
-    - cmake ..
-    - cmake --build . --config Release
+    cmake ..
+    cmake --build . --config Release
   3. That's it, from there, feel free to edit the code all you want. This is an open source project.
 
