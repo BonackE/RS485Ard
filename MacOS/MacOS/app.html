@@ -6,6 +6,8 @@
         font-family: -apple-system, 'Segoe UI Light', Ubuntu, Arial, sans-serif;
       }
     </style>
+    <link rel="stylesheet" type="text/css" href="app.css"/>
+    <script src="app.js"></script>
   </head>
   <body onload="LoadPorts();">
     <div class="parent-container">
@@ -73,12 +75,12 @@
               <div class="settings">
                 <label for="slaveId">Slave ID</label>
                 
-                <input type="number" id="slaveId" name="slaveId"></input>
+                <input type="number" id="slaveId" min="0" name="slaveId" required></input>
               </div>
               <div class="settings">
                 <label for="functionCode">Function Code</label>
                 
-                <select id="functionCode" name="functionCode">
+                <select id="functionCode" name="functionCode" required>
                         <option value="01">Read Coils (0x01)</option>
                         <option value="02">Read Discrete Inputs (0x02)</option>
                         <option value="03">Read Multiple Holding Registers (0x03)</option>
@@ -93,12 +95,12 @@
               <div class="settings">
                 <label for="startAddr">Start address</label>
                 
-                <input type="number" id="startAddr" name="startAddr"></input>
+                <input type="number" id="startAddr" min="0" name="startAddr" required></input>
               </div>
               <div class="settings">
                 <label for="numCoils">Num. coils</label>
                 
-                <input type="number" id="numCoils" name="numCoils"></input>
+                <input type="number" id="numCoils" min="0" name="numCoils" required></input>
               </div>
             </div>
             <div style="display: flex; flex-direction: row-reverse; align-items: center;">
@@ -161,8 +163,6 @@
                 <button style="float: right">Clear</button>
             </div>
               <div class="table-contain">
-
-                
                 <table>
                   <thead>
                     <tr>
@@ -184,221 +184,4 @@
       </div>
     </div>
   </body>
-  <style>
-    .column {
-      display: inline-block;
-      width: 45%;
-      vertical-align: top;
-      margin: 20px 10px;
-      padding: 10px;
-      box-sizing: border-box;
-      border: 1px solid #ddd;
-    }
-
-    .parent-container {
-      margin: 0 auto;
-      max-width: 100%;
-      padding: 10px;
-      box-sizing: border-box;
-      background-color: #eee;
-      text-align: center;
-    }
-    
-    input[type=number] {
-        width: 40px;
-    }
-    
-    .contain {
-      border: solid 2px #e9e9e9;
-      border-radius: 3px;
-      padding: 10px;
-      margin: 10px;
-    }
-    .toolbar {
-      text-align: right;
-      margin: 3px;
-    }
-
-    .settingsContainer {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-      
-    .settings {
-      padding: 0px 6px 0px 6px;
-      font-size: 60%;
-    }
-
-    .section-header {
-      text-align: center;
-      font-size: 70%;
-    }
-
-    .table-contain {
-      margin: 10px;
-      width: 95%;
-      height: 200px;
-      padding: 3px;
-      overflow: auto;
-    }
-      
-    .table-header {
-        font-size: 80%;
-        float: left;
-    }
-      
-    hr {
-        border: solid 1px #e9e9e9;
-        margin: 20px;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      padding: 10px;
-      display: block;
-      height: 180px;
-      border-collapse: collapse;
-      background-color: #ffffff;
-    }
-      
-    th,
-    td {
-      padding: 7px 10px 10px 10px;
-      text-align: left;
-      font-size: smaller;
-      border-bottom: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-    tr:hover {
-      background-color: #f5f5f5;
-    }
-    tr {
-      width: 0.1%;
-      white-space: nowrap;
-    }
-  </style>
 </html>
-
-<script>
-  //read the select options as a string and return string
-  function GetOptions() {
-    var select = document.getElementsByClassName('settingsLists')
-    //create empty array to store the values
-    var result = ''
-    for (var i = 0; i < select.length; i++) {
-      result += select[i].value
-      if (i != select.length - 1) result += ','
-    }
-    return result
-  }
-</script>
-
-<script>
-  window.onerror = (msg, url, line, column, error) => {
-    const message = {
-      message: msg,
-      url: url,
-      line: line,
-      column: column,
-      error: JSON.stringify(error),
-    }
-
-    if (window.webkit) {
-      window.webkit.messageHandlers.error.postMessage(message)
-    } else {
-      console.log('Error:', message)
-    }
-  }
-    
-    function display(data) {
-        if (window.webkit) {
-          window.webkit.messageHandlers.console.postMessage(data)
-        } else {
-          console.log('Data:', data)
-        }
-    }
-    
-    // helper function to parse an int to CCHAR data type
-    function parseInt8(value) {
-        const intValue = parseInt(value);
-        return intValue > 127 ? intValue - 256 : intValue;
-    }
- 
-    // formatting data to send to controller
-    const form = document.getElementById("modbus-form")
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        
-        const formData = new FormData(form);
-        
-        const numericFields = ["baudRate", "dataBits", "stopBits", "slaveId", "functionCode", "startAddr", "numCoils"];
-        const int8Field = ["parity"]
-
-        const data = {};
-
-        for (let field of formData.entries()) {
-            if (numericFields.includes(field[0])) {
-                const value = parseInt(field[1]);
-                if (isNaN(value)) {
-                    // Handle invalid number value here, such as throwing an error or setting a default value
-                    display("invalid number value")
-                } else {
-                    data[field[0]] = value;
-                }
-            } else {
-                if (int8Field.includes(field[0])) {
-                    const value = (field[1]).charCodeAt(0);
-                    data[field[0]] = value;
-                }
-                else {
-                    data[field[0]] = field[1];
-                }
-            }
-        }
-        const jsonData = JSON.stringify(data);
-        display(jsonData);
-        
-        window.webkit.messageHandlers.Connect.postMessage(jsonData)
-    });
-    
-
-  // call to Swift to LoadPorts()
-  function LoadPorts() {
-    var docPorts = document.getElementsByName('serialPort')
-    if (docPorts[0].options.length > 0) removeOptions(docPorts[0])
-
-    if (window.webkit) {
-      window.webkit.messageHandlers.LoadPorts.postMessage('')
-    }
-  }
-
-  // refresh options list
-  function removeOptions(selectElement) {
-    var i,
-      L = selectElement.options.length - 1
-    for (i = L; i >= 0; i--) {
-      selectElement.remove(i)
-    }
-  }
-
-  // called by WK with data to populate the webview
-  function handlePortsData(ports) {
-    var docPorts = document.getElementsByName('serialPort')
-    for (var i = 0; i < ports.length; i++) {
-      var optn = document.createElement('OPTION')
-      optn.text = '/dev/' + ports[i]
-      optn.value = '/dev/' + ports[i]
-      docPorts[0].options.add(optn)
-    }
-  }
-
-  function readInput() {
-    var myElement = document.getElementById('inputReg')
-    myElement.innerHTML = 'Button Clicked.'
-  }
-</script>

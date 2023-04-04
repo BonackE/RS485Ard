@@ -46,14 +46,16 @@ struct HTMLView: NSViewRepresentable {
     
     func makeNSView(context: Context) -> WKWebView {
         let webView = WKWebView()
-        
+
+        // create WKWebView Configuration Controller for injecting CSS, JS, and to coordinate between the HTML view
         let userContentController = webView.configuration.userContentController
+        
+        // adding context for JavaScript functions
         userContentController.add(context.coordinator, name: "getJsonData")
         userContentController.add(context.coordinator, name: "error")
         userContentController.add(context.coordinator, name: "console")
         userContentController.add(context.coordinator, name: "LoadPorts")
         userContentController.add(context.coordinator, name: "Connect")
-        
         
         return webView
     }
@@ -61,7 +63,20 @@ struct HTMLView: NSViewRepresentable {
     func updateNSView(_ nsView: WKWebView, context: Context) {
         if let htmlFile = Bundle.main.path(forResource: htmlFileName, ofType: "html") {
             let htmlString = try? String(contentsOfFile: htmlFile, encoding: .utf8)
-            nsView.loadHTMLString(htmlString ?? "", baseURL: URL(string: "http://localhost/")!)
+            
+            // Adding CSS and JS 
+            let cssURL = Bundle.main.url(forResource: "app", withExtension: "css")
+            // adding CSS and JS
+            let cssScript = WKUserScript(source: "var link = document.createElement('link'); link.rel = 'stylesheet'; link.href = '\(cssURL?.absoluteString ?? "")'; document.head.appendChild(link);", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+            
+            let jsURL = Bundle.main.url(forResource: "app", withExtension: "js")
+            let jsScript = WKUserScript(source: "var script = document.createElement('script'); script.src = '\(jsURL?.absoluteString ?? "")'; document.head.appendChild(script);", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+            
+            let userContentController = nsView.configuration.userContentController
+            userContentController.addUserScript(cssScript)
+            userContentController.addUserScript(jsScript)
+                        
+            nsView.loadHTMLString(htmlString ?? "", baseURL: Bundle.main.bundleURL)
         }
     }
 
@@ -131,8 +146,6 @@ struct HTMLView: NSViewRepresentable {
                 } catch {
                     print("Error decoding JSON data: \(error)")
                 }
-                
-
             }
         }
     }

@@ -10,6 +10,9 @@
 		EB90625929C4DD36006F6BBD /* devices.json in Resources */ = {isa = PBXBuildFile; fileRef = EB90625829C4DD36006F6BBD /* devices.json */; };
 		EB9A8F6D29C22B3700CB4888 /* libmodbus.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */; };
 		EB9A8F6E29C22B3700CB4888 /* libmodbus.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		EBD45C5229DC6C5F00D55FB3 /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = EBD45C5129DC6C5F00D55FB3 /* app.js */; };
+		EBD45C5629DC6D2300D55FB3 /* app.css in Resources */ = {isa = PBXBuildFile; fileRef = EBD45C5529DC6D2300D55FB3 /* app.css */; };
+		EBD45C5929DC858E00D55FB3 /* libmodbus.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = EBD45C5829DC858E00D55FB3 /* libmodbus.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		FF86141E29BFD8FA005A19DD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF86141D29BFD8FA005A19DD /* WebKit.framework */; };
 		FF86142029BFDAB3005A19DD /* app.html in Resources */ = {isa = PBXBuildFile; fileRef = FF86141F29BFDAB3005A19DD /* app.html */; };
 		FF908AF329BF7DFC00BCAA6C /* MacOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF908AF229BF7DFC00BCAA6C /* MacOSApp.swift */; };
@@ -39,6 +42,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		EBD45C5729DC855D00D55FB3 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EBD45C5929DC858E00D55FB3 /* libmodbus.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		FF908B2129BF7EFC00BCAA6C /* Embed Libraries */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -55,6 +68,9 @@
 /* Begin PBXFileReference section */
 		EB90625829C4DD36006F6BBD /* devices.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = devices.json; sourceTree = "<group>"; };
 		EB9A8F6C29C22B3600CB4888 /* libmodbus.dylib */ = {isa = PBXFileReference; explicitFileType = sourcecode.c; name = libmodbus.dylib; path = ../../../../../usr/local/lib/libmodbus.dylib; sourceTree = "<group>"; };
+		EBD45C5129DC6C5F00D55FB3 /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = app.js; sourceTree = "<group>"; };
+		EBD45C5529DC6D2300D55FB3 /* app.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = app.css; sourceTree = "<group>"; };
+		EBD45C5829DC858E00D55FB3 /* libmodbus.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmodbus.dylib; sourceTree = "<group>"; };
 		FF86141D29BFD8FA005A19DD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		FF86141F29BFDAB3005A19DD /* app.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = app.html; sourceTree = "<group>"; };
 		FF908AEF29BF7DFC00BCAA6C /* MacOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,8 +92,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB9A8F6D29C22B3700CB4888 /* libmodbus.dylib in Frameworks */,
 				FF86141E29BFD8FA005A19DD /* WebKit.framework in Frameworks */,
+				EB9A8F6D29C22B3700CB4888 /* libmodbus.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +117,7 @@
 		FF908AE629BF7DFB00BCAA6C = {
 			isa = PBXGroup;
 			children = (
+				EBD45C5829DC858E00D55FB3 /* libmodbus.dylib */,
 				FF908AF129BF7DFC00BCAA6C /* MacOS */,
 				FF908B0329BF7DFD00BCAA6C /* MacOSTests */,
 				FF908B0D29BF7DFD00BCAA6C /* MacOSUITests */,
@@ -122,11 +139,13 @@
 		FF908AF129BF7DFC00BCAA6C /* MacOS */ = {
 			isa = PBXGroup;
 			children = (
+				EBD45C5529DC6D2300D55FB3 /* app.css */,
 				FF86141F29BFDAB3005A19DD /* app.html */,
 				FF908B2329BF85D100BCAA6C /* modbus_Bridge.h */,
 				FF908AF229BF7DFC00BCAA6C /* MacOSApp.swift */,
 				FF908AF429BF7DFC00BCAA6C /* ContentView.swift */,
 				FF908AF629BF7DFC00BCAA6C /* Assets.xcassets */,
+				EBD45C5129DC6C5F00D55FB3 /* app.js */,
 				FF908AFB29BF7DFC00BCAA6C /* MacOS.entitlements */,
 				FF908AF829BF7DFC00BCAA6C /* Preview Content */,
 				EB90625829C4DD36006F6BBD /* devices.json */,
@@ -179,6 +198,7 @@
 				FF908AEC29BF7DFC00BCAA6C /* Frameworks */,
 				FF908AED29BF7DFC00BCAA6C /* Resources */,
 				FF908B2129BF7EFC00BCAA6C /* Embed Libraries */,
+				EBD45C5729DC855D00D55FB3 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -274,8 +294,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBD45C5229DC6C5F00D55FB3 /* app.js in Resources */,
 				FF908AFA29BF7DFC00BCAA6C /* Preview Assets.xcassets in Resources */,
 				FF908AF729BF7DFC00BCAA6C /* Assets.xcassets in Resources */,
+				EBD45C5629DC6D2300D55FB3 /* app.css in Resources */,
 				FF86142029BFDAB3005A19DD /* app.html in Resources */,
 				EB90625929C4DD36006F6BBD /* devices.json in Resources */,
 			);
