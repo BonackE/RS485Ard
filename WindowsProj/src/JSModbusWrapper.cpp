@@ -167,17 +167,25 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
 				}
 			}
             code += "\"];"
+                
                 "const table = document.getElementById('dataTable');"
                 "var tbody = table.getElementsByTagName('tbody')[0];"
+                "while (tbody.rows.length > 0) {"
+                "tbody.deleteRow(0);"
+                "}"
+                "for(var i = 0 ; i < options.length ; i++) {"
                 "var newRow = tbody.insertRow();"
+
                 "var data = newRow.insertCell(0);"
                 "var register = newRow.insertCell(1);"
                 "var dataNum = newRow.insertCell(2);"
                 "var codeString = \"" + codeString + "\";"
 
                 "data.innerHTML = codeString;"
-                "register.innerHTML = 0;"
-                "dataNum.innerHTML = options[0];";
+                "register.innerHTML = i;"
+                "dataNum.innerHTML = options[i];"
+
+                "}";
 		}
         }
     
