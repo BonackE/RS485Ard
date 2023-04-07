@@ -20,6 +20,7 @@ public:
 	JSValueRef LoadPortsFunc(JSContextRef ctx);
 	JSValueRef ConnectFunc(JSContextRef ctx);
 	JSValueRef RequestFunc(JSContextRef ctx);
+
 private:
 	JSModbusWrapper() {
 		modbus = ModbusFunctions();
@@ -29,6 +30,8 @@ private:
 	JSModbusWrapper& operator=(const JSModbusWrapper& other) = delete;
 	ModbusFunctions modbus;
 	View* view;
+	FILE* fp;
+
 };
 
 #endif // !

@@ -12,6 +12,31 @@
   </head>
   <body onload="LoadPorts();load()">
     <div id="result">Test</div>
+	<div id="error-container">E</div>
+    <script>
+      // Define a function to handle JavaScript errors
+      function handleErrors(msg, url, line, col, error) {
+        // Create an error message string
+        var errMsg = "Error: " + msg + "<br>" +
+                     "URL: " + url + "<br>" +
+                     "Line: " + line + "<br>" +
+                     "Column: " + col + "<br>" +
+                     "Stack Trace: " + error.stack;
+                     
+        // Display the error message in the error container
+        var errorContainer = document.getElementById("error-container");
+        errorContainer.innerHTML = errMsg;
+        
+        // Prevent the default error handling behavior
+        return true;
+      }
+      
+      // Attach the error handling function to the window.onerror event
+      window.onerror = handleErrors;
+      
+      // Throw an error for testing purposes
+      
+    </script>
     <div class="parent-container">
       <div class="toolbar">
         <button onclick="Connect();">Connect</button>
@@ -118,7 +143,7 @@
     
                     <input type="text" disabled="true" id="hex-data" style="width: max-width"></input>
                     <div style="float: right">
-                        <button type="button" onclick="Requests()">Send</button>
+                        <button type="button" onclick="Requests();">Send</button>
                     </div>
             </div>
             </form>

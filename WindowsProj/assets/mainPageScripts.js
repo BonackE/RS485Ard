@@ -155,7 +155,16 @@ function load(){
 
       request += document.getElementById("startAddr").value+",";
       request += document.getElementById("numCoils").value;
-      document.getElementById('result').innerHTML = request;
+      
       return request;
+
+    }
+    function CountRows(){
+      
+        if(document.getElementById('dataTable').getElementsByTagName('tbody')[0].rows.length > 0){
+          while(document.getElementById('dataTable').getElementsByTagName('tbody')[0].rows.length > 0){
+            document.getElementById('dataTable').getElementsByTagName('tbody')[0].deleteRow(0);
+          }
+        }
 
     }

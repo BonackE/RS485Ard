@@ -1,8 +1,11 @@
 #include "JSModbusWrapper.h"
 #include <cstdlib>
+#include<sstream>
 using namespace ultralight;
 void JSModbusWrapper::SetView(View* view) {
     this->view = view;
+    modbus_set_debug(modbus.ctx, TRUE);
+    fp = freopen("debug.txt", "w", stdout);
 }
 JSValueRef JSModbusWrapper::LoadPortsFunc(JSContextRef ctx) {
 
@@ -57,8 +60,8 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     modbus_free(modbus.ctx);
     modbus.ctx = NULL;
     
-    String origStr = view->EvaluateScript("GetOptions()");
-    std::string str = origStr.utf8().data();
+    String JSCode = view->EvaluateScript("GetOptions()");
+    std::string str = JSCode.utf8().data();
     std::vector<std::string> data;
     std::string temp;
     for (int i = 0; i < str.length(); i++) {
@@ -81,7 +84,8 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     try {
         
             modbus.ctx = modbus_new_rtu(data[0].c_str(), stoi(data[1]), data[4][0], stoi(data[2]), stoi(data[3]));
-
+            
+            
         
         
     if (modbus.ctx == NULL) {
@@ -96,6 +100,7 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     }
     else {
         connectTest = "Connected to " + data[0];
+		fclose(fp);
     }
 }   //catch EINVAL
 	catch (const std::invalid_argument& ia) {
@@ -122,13 +127,14 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     
 }
 JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
-    String origStr = view->EvaluateScript("GetRequest()");
-    std::string str = origStr.utf8().data();
+    String JSCode = view->EvaluateScript("GetRequest()");
+    std::string str = JSCode.utf8().data();
     std::vector<std::string> data;
     std::string temp;
     std::string code = "";
     std::string codeString;
-    uint16_t* tab_reg;
+
+    uint16_t* tab_reg = NULL;
     for (int i = 0; i < str.length(); i++) {
         if (str[i] == ',') {
             if (temp[0] == ',') {
@@ -145,6 +151,8 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
     switch (stoi(data[1])) {
         //switch cases for all function codes
     case 4:
+
+        
         //function 4 read input registers
 		tab_reg = (uint16_t*)malloc(sizeof(uint16_t) * stoi(data[3]));
         codeString = "Input Register";
@@ -159,6 +167,11 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
             
         }
         else {
+
+            
+            String s = view->EvaluateScript("CountRows()");
+
+
 			code = "var options = [\"";
 			for (int i = 0; i < stoi(data[3]); i++) {
 				code += std::to_string(tab_reg[i]);
@@ -167,12 +180,12 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
 				}
 			}
             code += "\"];"
-                
-                "const table = document.getElementById('dataTable');"
+                "try{"
+                "var table = document.getElementById('dataTable');"
                 "var tbody = table.getElementsByTagName('tbody')[0];"
-                "while (tbody.rows.length > 0) {"
-                "tbody.deleteRow(0);"
-                "}"
+                "let rows = tbody.rows.length;"
+
+
                 "for(var i = 0 ; i < options.length ; i++) {"
                 "var newRow = tbody.insertRow();"
 
@@ -184,8 +197,16 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
                 "data.innerHTML = codeString;"
                 "register.innerHTML = i;"
                 "dataNum.innerHTML = options[i];"
+                
 
-                "}";
+                "}"
+                "document.getElementById('result').innerHTML = buffer;"
+                "}"
+                "catch(error){"
+                
+                "}"
+                ;
+            
 		}
         }
     
@@ -199,8 +220,13 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
 
 	// Release our string and JavaScript objects
 	JSStringRelease(script);
-    free(tab_reg);
-	return result;
+    if (tab_reg == NULL) {
+        return result;
+    }
+    else {
+        free(tab_reg);
+        return result;
+    }
 }
 
 
