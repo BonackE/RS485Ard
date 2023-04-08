@@ -4,8 +4,7 @@
 using namespace ultralight;
 void JSModbusWrapper::SetView(View* view) {
     this->view = view;
-    modbus_set_debug(modbus.ctx, TRUE);
-    fp = freopen("debug.txt", "w", stdout);
+
 }
 JSValueRef JSModbusWrapper::LoadPortsFunc(JSContextRef ctx) {
 
@@ -54,7 +53,7 @@ JSValueRef JSModbusWrapper::LoadPortsFunc(JSContextRef ctx) {
 
 	return result;
 }
-
+//Should return whether the connection was successful in JS
 JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     modbus_close(modbus.ctx);
     modbus_free(modbus.ctx);
@@ -100,7 +99,7 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     }
     else {
         connectTest = "Connected to " + data[0];
-		fclose(fp);
+
     }
 }   //catch EINVAL
 	catch (const std::invalid_argument& ia) {
@@ -126,6 +125,8 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     return result;
     
 }
+
+//Should return the data in the table
 JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
     String JSCode = view->EvaluateScript("GetRequest()");
     std::string str = JSCode.utf8().data();
@@ -184,7 +185,7 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
                 "var table = document.getElementById('dataTable');"
                 "var tbody = table.getElementsByTagName('tbody')[0];"
                 "let rows = tbody.rows.length;"
-
+                "var codeString = \"" + codeString + "\";"
 
                 "for(var i = 0 ; i < options.length ; i++) {"
                 "var newRow = tbody.insertRow();"
@@ -192,7 +193,7 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
                 "var data = newRow.insertCell(0);"
                 "var register = newRow.insertCell(1);"
                 "var dataNum = newRow.insertCell(2);"
-                "var codeString = \"" + codeString + "\";"
+                
 
                 "data.innerHTML = codeString;"
                 "register.innerHTML = i;"

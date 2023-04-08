@@ -7,6 +7,7 @@
 class ModbusFunctions
 {
 public:
+	//Returns a vector of strings containing all serial ports on the system (that are being used)
 	std::vector<std::string> getSerialPorts();
 	modbus_t* ctx;
 

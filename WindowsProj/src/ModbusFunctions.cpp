@@ -1,5 +1,7 @@
 #include "ModbusFunctions.h"
 #include <Windows.h>
+//Function only works for windows, will need to be changed for other OS
+//Returns a vector of strings containing all serial ports on the system (that are being used)
 std::vector<std::string> ModbusFunctions::getSerialPorts() {
 	std::vector<std::string> port_list;
 
