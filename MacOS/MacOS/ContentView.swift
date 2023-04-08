@@ -141,6 +141,7 @@ struct HTMLView: NSViewRepresentable {
                     let config = try decoder.decode(ModbusConfig.self, from: jsonData)
                     modbus = Modbus(device: config.serialPort, baudRate: config.baudRate, parity: config.parity,
                                     dataBits: config.dataBits, stopBits: config.stopBits)
+                    
                     modbus_set_slave(modbus.modbus, config.slaveId)
 
                 } catch {

@@ -43,6 +43,8 @@ class Modbus : ObservableObject {
             print("failed connection: \(errorMessage)")
             modbus_free(modbus)
         }
+        
+        
     }
 }
 
