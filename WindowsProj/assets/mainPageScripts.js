@@ -168,3 +168,10 @@ function load(){
         }
 
     }
+
+    function ClearTransData(){
+      while(document.getElementById('translatedData').getElementsByTagName('tbody')[0].rows.length>0){
+        document.getElementById('translatedData').getElementsByTagName('tbody')[0].deleteRow(0);
+      }
+
+    }

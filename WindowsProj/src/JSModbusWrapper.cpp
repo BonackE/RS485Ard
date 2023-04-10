@@ -2,6 +2,11 @@
 #include <cstdlib>
 #include<sstream>
 using namespace ultralight;
+union {
+    uint16_t i[2];
+    float data;
+    
+}reg2float;
 void JSModbusWrapper::SetView(View* view) {
     this->view = view;
 
@@ -170,10 +175,22 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
         else {
 
             
+            
             String s = view->EvaluateScript("CountRows()");
+			
+            uint16_t tempData[2];
+            code += "var regdata = [\"";
+            for (int i = 0; i < stoi(data[3]); i+=2) {
+                tempData[0] = tab_reg[i];
+                tempData[1] = tab_reg[i + 1];
+                code += std::to_string(modbus_get_float_cdab(tempData));
+                if (i != stoi(data[3]) - 1) {
+                    code += "\",\"";
+                }
 
-
-			code = "var options = [\"";
+            }
+            code += "\"];";
+			code += "var options = [\"";
 			for (int i = 0; i < stoi(data[3]); i++) {
 				code += std::to_string(tab_reg[i]);
 				if (i != stoi(data[3]) - 1) {
@@ -184,7 +201,9 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
                 "try{"
                 "var table = document.getElementById('dataTable');"
                 "var tbody = table.getElementsByTagName('tbody')[0];"
-                "let rows = tbody.rows.length;"
+                "var transTable = document.getElementById('translatedData');"
+                "var transBody = transTable.getElementsByTagName('tbody')[0];"
+
                 "var codeString = \"" + codeString + "\";"
 
                 "for(var i = 0 ; i < options.length ; i++) {"
@@ -193,15 +212,27 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
                 "var data = newRow.insertCell(0);"
                 "var register = newRow.insertCell(1);"
                 "var dataNum = newRow.insertCell(2);"
-                
+
 
                 "data.innerHTML = codeString;"
                 "register.innerHTML = i;"
                 "dataNum.innerHTML = options[i];"
+                "if(i<options.length/2){"
+                "var newRow2 = transBody.insertRow();"
+
+
+                "var registers = newRow2.insertCell(0);"
+                "var data2 = newRow2.insertCell(1);"
+
+
+                "var num = i+1;"
+                "registers.innerHTML = i + \" and \" + num; "
+                "data2.innerHTML = regdata[i];"
+                "}"
                 
 
                 "}"
-                "document.getElementById('result').innerHTML = buffer;"
+                
                 "}"
                 "catch(error){"
                 
