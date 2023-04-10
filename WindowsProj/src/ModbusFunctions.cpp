@@ -27,16 +27,9 @@ std::vector<std::string> ModbusFunctions::getSerialPorts() {
 
 }
 //Function to return a string of hex values from a uint16_t array
-std::string getHexCode(uint16_t* values, int size) {
-	
-	//Converts the uint16_t array to a string of hex values
-	std::string hexCode = "";
-	for (int i = 0; i < size; i++) {
-		std::stringstream stream;
-		stream << std::hex << values[i];
-		std::string result(stream.str());
-		hexCode += result;
-	}
-	return hexCode;
+std::string ModbusFunctions::getHexReq(uint16_t* values, int size) {
 
+
+	
+	return "";
 }

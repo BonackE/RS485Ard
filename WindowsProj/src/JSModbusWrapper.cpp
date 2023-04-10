@@ -176,7 +176,7 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
             
         }
         else {
-            printf("Test\n");
+            
 
 
 
