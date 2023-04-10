@@ -5,7 +5,7 @@
 std::vector<std::string> ModbusFunctions::getSerialPorts() {
 	std::vector<std::string> port_list;
 
-
+	
 
 	DWORD test;
 	TCHAR lptargetpath[5000];
@@ -24,5 +24,19 @@ std::vector<std::string> ModbusFunctions::getSerialPorts() {
 	}
 
 	return port_list;
+
+}
+//Function to return a string of hex values from a uint16_t array
+std::string getHexCode(uint16_t* values, int size) {
+	
+	//Converts the uint16_t array to a string of hex values
+	std::string hexCode = "";
+	for (int i = 0; i < size; i++) {
+		std::stringstream stream;
+		stream << std::hex << values[i];
+		std::string result(stream.str());
+		hexCode += result;
+	}
+	return hexCode;
 
 }

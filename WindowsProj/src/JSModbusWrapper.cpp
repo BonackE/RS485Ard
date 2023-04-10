@@ -1,6 +1,6 @@
 #include "JSModbusWrapper.h"
 #include <cstdlib>
-#include<sstream>
+
 using namespace ultralight;
 union {
     uint16_t i[2];
@@ -9,7 +9,7 @@ union {
 }reg2float;
 void JSModbusWrapper::SetView(View* view) {
     this->view = view;
-
+    
 }
 JSValueRef JSModbusWrapper::LoadPortsFunc(JSContextRef ctx) {
 
@@ -88,8 +88,9 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     try {
         
             modbus.ctx = modbus_new_rtu(data[0].c_str(), stoi(data[1]), data[4][0], stoi(data[2]), stoi(data[3]));
-            
-            
+            int debug =modbus_set_debug(modbus.ctx, TRUE);
+           
+            printf("%d\n", debug);
         
         
     if (modbus.ctx == NULL) {
@@ -100,6 +101,7 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
 		
 
 		connectTest = "Connection failed: " + std::string(modbus_strerror(errno));
+        
         modbus_free(modbus.ctx);
     }
     else {
@@ -168,17 +170,22 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
 				"document.getElementById('result').innerHTML = options;";
         }
         if (modbus_read_input_registers(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_reg) == -1) {
+            printf("%d\n", errno);
 			code = "var options = \"Read input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
 				"document.getElementById('result').innerHTML = options;";
             
         }
         else {
+            printf("Test\n");
 
-            
-            
+
+
+
+
             String s = view->EvaluateScript("CountRows()");
 			
             uint16_t tempData[2];
+
             code += "var regdata = [\"";
             for (int i = 0; i < stoi(data[3]); i+=2) {
                 tempData[0] = tab_reg[i];

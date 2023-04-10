@@ -3,8 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
-
-
+#include <errno.h>
 #include "ModbusFunctions.h"
 #include "MyApp.h"
 using namespace ultralight;
