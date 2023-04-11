@@ -88,9 +88,7 @@ JSValueRef JSModbusWrapper::ConnectFunc(JSContextRef ctx) {
     try {
         
             modbus.ctx = modbus_new_rtu(data[0].c_str(), stoi(data[1]), data[4][0], stoi(data[2]), stoi(data[3]));
-            int debug =modbus_set_debug(modbus.ctx, TRUE);
-           
-            printf("%d\n", debug);
+
         
         
     if (modbus.ctx == NULL) {
@@ -164,20 +162,41 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
         //function 4 read input registers
 		tab_reg = (uint16_t*)malloc(sizeof(uint16_t) * stoi(data[3]));
         codeString = "Input Register";
+        
         if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
             
 			code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
 				"document.getElementById('result').innerHTML = options;";
         }
+        std::string hexReq = modbus.getHexReq(MODBUS_FC_READ_INPUT_REGISTERS, stoi(data[2]), stoi(data[3]));
+        code += "var hexReq = \"" + hexReq + "\";"
+            "try{"
+            "var rawData = document.getElementById('rawData');"
+            "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+            "var rawRow = rawTbody.insertRow();"
+            
+            "rawRow.innerHTML = hexReq;"
+            "}catch(error){"
+            "document.getElementById('result').innerHTML = error;"
+            "}";
         if (modbus_read_input_registers(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_reg) == -1) {
-            printf("%d\n", errno);
+
 			code = "var options = \"Read input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
 				"document.getElementById('result').innerHTML = options;";
             
         }
         else {
-            
+            std::string resp = modbus.getHexResp(tab_reg,stoi(data[3]));
+            code +="var hexResp = \"" + resp + "\";"
+                "try{"
+                "var rawData = document.getElementById('rawData');"
+                "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+                "var rawRow = rawTbody.insertRow();"
 
+                "rawRow.innerHTML = hexResp;"
+                "}catch(error){"
+                "document.getElementById('result').innerHTML = error;"
+                "}";
 
 
 
@@ -185,7 +204,7 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
             String s = view->EvaluateScript("CountRows()");
 			
             uint16_t tempData[2];
-
+            
             code += "var regdata = [\"";
             for (int i = 0; i < stoi(data[3]); i+=2) {
                 tempData[0] = tab_reg[i];
