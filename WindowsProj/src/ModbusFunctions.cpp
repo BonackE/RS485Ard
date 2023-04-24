@@ -51,7 +51,7 @@ std::string ModbusFunctions::getHexReq(int function, int addr, int nb){
 	
 	
 }
-std::string ModbusFunctions::getHexResp(uint16_t* data, int resp_length) {
+std::string ModbusFunctions::getHexResp(uint16_t* data, int function,int resp_length) {
     std::stringstream ss;
     std::string respStr = "";
 
@@ -60,7 +60,7 @@ std::string ModbusFunctions::getHexResp(uint16_t* data, int resp_length) {
 
     
     resp[0] =ctx->slave;
-    resp[1] = MODBUS_FC_READ_INPUT_REGISTERS;
+    resp[1] = function;
     int msg_len = 2;
     // Copy the uint16_t data into the message buffer as two separate uint8_t values
     for (int i = 0; i < resp_length; i++) {
@@ -84,7 +84,46 @@ std::string ModbusFunctions::getHexResp(uint16_t* data, int resp_length) {
     free(resp);
     return respStr;
 }
+std::string ModbusFunctions::getHexResp(uint8_t* data, int function, int resp_length) {
+    std::stringstream ss;
+    std::string respStr = "";
 
+    // Calculate the number of bytes needed to store the uint8_t array
+    int byte_count = resp_length / 8;
+    if (resp_length % 8 != 0) {
+        byte_count++;
+    }
+
+    // Allocate memory for the response message
+    uint8_t* resp = (uint8_t*)malloc((byte_count + 4) * sizeof(uint8_t));
+
+    // Initialize the first two bytes of the response message
+    resp[0] = ctx->slave;
+    resp[1] = function;
+    int msg_len = 2;
+
+    // Copy the uint8_t data into the message buffer as individual bits
+    for (int i = 0; i < resp_length; i++) {
+        int byte_index = i / 8;
+        int bit_index = i % 8;
+        resp[msg_len + byte_index] |= (data[i] << bit_index);
+    }
+
+    // Calculate the CRC of the response message
+    uint16_t crc = calculate_crc(resp, msg_len + byte_count);
+
+    // Add the slave ID, function code, data, and CRC to the response message
+    for (int i = 0; i < msg_len + byte_count; i++) {
+        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(resp[i]) << " ";
+    }
+    ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(crc & 0xff) << " ";
+    ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>((crc >> 8) & 0xff) << " ";
+
+    respStr = ss.str();
+
+    free(resp);
+    return respStr;
+}
 uint16_t ModbusFunctions::calculate_crc(uint8_t* data, int length) {
     uint16_t crc = 0xFFFF;
     int i, j;
