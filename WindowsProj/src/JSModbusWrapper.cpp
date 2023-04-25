@@ -237,6 +237,115 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
         }
         break;
     }
+    case 3:
+    {
+        tab_reg = (uint16_t*)malloc(sizeof(uint16_t) * stoi(data[3]));
+        codeString = "Input Register";
+
+        if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
+
+            code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
+                "document.getElementById('result').innerHTML = options;";
+        }
+        std::string hexReq = modbus.getHexReq(MODBUS_FC_READ_HOLDING_REGISTERS, stoi(data[2]), stoi(data[3]));
+        code += "var hexReq = \"" + hexReq + "\";"
+            "try{"
+            "var rawData = document.getElementById('rawData');"
+            "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+            "var rawRow = rawTbody.insertRow();"
+
+            "rawRow.innerHTML = hexReq;"
+            "}catch(error){"
+            "document.getElementById('result').innerHTML = error;"
+            "}";
+        if (modbus_read_registers(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_reg) == -1) {
+
+            code = "var options = \"Read input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
+                "document.getElementById('result').innerHTML = options;";
+
+        }
+        else {
+            std::string resp = modbus.getHexResp(tab_reg, MODBUS_FC_READ_HOLDING_REGISTERS, stoi(data[3]));
+            code += "var hexResp = \"" + resp + "\";"
+                "try{"
+                "var rawData = document.getElementById('rawData');"
+                "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+                "var rawRow = rawTbody.insertRow();"
+
+                "rawRow.innerHTML = hexResp;"
+                "}catch(error){"
+                "document.getElementById('result').innerHTML = error;"
+                "}";
+
+
+
+
+            String s = view->EvaluateScript("CountRows()");
+
+            uint16_t tempData[2];
+
+            code += "var regdata = [\"";
+            for (int i = 0; i < stoi(data[3]); i += 2) {
+                tempData[0] = tab_reg[i];
+                tempData[1] = tab_reg[i + 1];
+                code += std::to_string(modbus_get_float_cdab(tempData));
+                if (i != stoi(data[3]) - 1) {
+                    code += "\",\"";
+                }
+
+            }
+            code += "\"];";
+            code += "var options = [\"";
+            for (int i = 0; i < stoi(data[3]); i++) {
+                code += std::to_string(tab_reg[i]);
+                if (i != stoi(data[3]) - 1) {
+                    code += "\",\"";
+                }
+            }
+            code += "\"];"
+                "try{"
+                "var table = document.getElementById('dataTable');"
+                "var tbody = table.getElementsByTagName('tbody')[0];"
+                "var transTable = document.getElementById('translatedData');"
+                "var transBody = transTable.getElementsByTagName('tbody')[0];"
+
+                "var codeString = \"" + codeString + "\";"
+
+                "for(var i = 0 ; i < options.length ; i++) {"
+                "var newRow = tbody.insertRow();"
+
+                "var data = newRow.insertCell(0);"
+                "var register = newRow.insertCell(1);"
+                "var dataNum = newRow.insertCell(2);"
+
+
+                "data.innerHTML = codeString;"
+                "register.innerHTML = i;"
+                "dataNum.innerHTML = options[i];"
+                "if(i<options.length/2){"
+                "var newRow2 = transBody.insertRow();"
+
+
+                "var registers = newRow2.insertCell(0);"
+                "var data2 = newRow2.insertCell(1);"
+
+
+                "var num = i+1;"
+                "registers.innerHTML = i + \" and \" + num; "
+                "data2.innerHTML = regdata[i];"
+                "}"
+
+
+                "}"
+
+                "}"
+                "catch(error){"
+
+                "}";
+
+        }
+        break;
+    }
 
         //switch cases for all function codes
     case 4:
@@ -362,7 +471,7 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
 
 	// Release our string and JavaScript objects
 	JSStringRelease(script);
-    if (tab_reg == NULL) {
+    if (tab_reg == NULL && tab_bits == NULL) {
         return result;
     }
     else {
