@@ -94,8 +94,8 @@ std::string ModbusFunctions::getHexResp(uint8_t* data, int function, int resp_le
         byte_count++;
     }
 
-    // Allocate memory for the response message
-    uint8_t* resp = (uint8_t*)malloc((byte_count + 4) * sizeof(uint8_t));
+    // Allocate memory for the response message and initialize it to zero
+    uint8_t* resp = (uint8_t*)calloc(byte_count + 4, sizeof(uint8_t));
 
     // Initialize the first two bytes of the response message
     resp[0] = ctx->slave;

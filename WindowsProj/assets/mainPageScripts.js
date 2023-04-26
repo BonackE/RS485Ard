@@ -175,3 +175,17 @@ function load(){
       }
 
     }
+    function GetCellData(){
+      var data = "";
+      var table = document.getElementById("dataTable");
+      var rowLength = table.rows.length;
+      
+      for(var i = 1; i < rowLength; i++){
+        data += table.rows[i].cells[2].innerHTML;
+        if(i < rowLength-1){
+          data +=",";
+        }
+      }
+      return data;
+    }
+    
