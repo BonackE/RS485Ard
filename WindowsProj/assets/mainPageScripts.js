@@ -188,4 +188,7 @@ function load(){
       }
       return data;
     }
+    function GetTranslatedRead(){
+       return document.getElementById("transData").value;
+    }
     

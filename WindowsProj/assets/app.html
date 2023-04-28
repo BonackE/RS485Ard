@@ -103,7 +103,7 @@
 
             <div class="settingsContainer">
               <div class="settings">
-                <label for="slaveId">Slave ID</label>
+                <label for="slaveId" style="display:flex;flex-direction:column;">Slave ID</label>
                 
                 <input type="number" id="slaveId" name="slaveId"></input>
               </div>
@@ -119,19 +119,19 @@
                 </select>
               </div>
               <div class="settings">
-                <label for="startAddr">Start address</label>
+                <label for="startAddr">Start Address</label>
                 
                 <input type="number" id="startAddr" name="startAddr"></input>
               </div>
               <div class="settings">
-                <label for="numCoils">Num. coils</label>
+                <label for="numCoils">Num. Coils</label>
                 
                 <input type="number" id="numCoils" name="numCoils"></input>
               </div>
             </div>
             <div style="display: flex; flex-direction: row-reverse; align-items: center;">
-                <p style="font-size: 60%">Display Hex Data</p>
-                <input type="checkbox" name="hex-data-checkbox" value="display-hex-data" checked="checked"
+                <p style="font-size: 60%">Display Translated Data (Only works for even registers)</p>
+                <input id="translatedCheckBox" type="checkbox" name="translated-data-checkbox" value="display-hex-data" checked="checked"
                     style="padding-top: 3px;"></input>
             </div>
 
@@ -182,34 +182,32 @@
             </div>
     
             <hr />
-            <div style="margin: 10px; width: 95%; padding: 3px;">
-                <p class="table-header">Modbus requests/responses:</p>
-                <button style="float: right">Clear</button>
-            </div>
-              <div class="table-contain">
-
+			<p class="section-header">Translated Data</p>
+			<div class="settingsContainer">
+			<div class="custom-select">
+            
+			<label for="transData">Translation Type</label>
                 
-                <table>
-                  <thead>
-                    <tr>
-                      <th>I/O</th>
-                      <th>Slave ID</th>
-                      <th>Function code</th>
-                      <th>Start address</th>
-                      <th>Num coils</th>
-                      <th>CRC</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-                </table>
-              </div>
-			  <div style="margin: 10px; width: 95%; padding: 3px;">
-                <p class="table-header">Translated Data</p>
-                <button style="float: right" onclick="ClearTransData('translatedData')">Clear</button>
-            </div>
-              <div class="table-contain">
+                <select id="transData" name="transData">
+                        <option value="abcd">abcd</option>
+                        <option value="badc">badc</option>
+                        <option value="cdab">cdab</option>
+                        <option value="dcba">dcba</option>
 
+                </select>
+			</div>
+			</div>
+			
+                
+				
+			
+			<button style="float:right;" onclick="ClearTransData('translatedData')">Clear</button>
+			
+			
+			
+			
+              <div class="table-contain">
+					
                 
                 <table id="translatedData">
                   <thead>

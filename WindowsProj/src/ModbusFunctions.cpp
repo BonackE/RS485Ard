@@ -124,6 +124,40 @@ std::string ModbusFunctions::getHexResp(uint8_t* data, int function, int resp_le
     free(resp);
     return respStr;
 }
+std::string ModbusFunctions::getHexRespWrite(uint16_t* data, int function, int resp_length, int start_addr, int num_regs_written) {
+    std::stringstream ss;
+    std::string respStr = "";
+
+    // Copy the uint16_t data into a temporary uint8_t array
+    uint8_t* resp = (uint8_t*)malloc((resp_length * 2 + 7) * sizeof(uint8_t));
+
+    // Add the slave ID, function code, start address, and number of registers written to the response message
+    resp[0] = ctx->slave;
+    resp[1] = function;
+    resp[2] = (start_addr >> 8) & 0xff;
+    resp[3] = start_addr & 0xff;
+    resp[4] = (num_regs_written >> 8) & 0xff;
+    resp[5] = num_regs_written & 0xff;
+
+    int msg_len = 6;
+
+    // Calculate the CRC of the response message
+    uint16_t crc = calculate_crc(resp, msg_len);
+
+    // Add the CRC to the response message
+    resp[msg_len++] = crc & 0xff;
+    resp[msg_len++] = (crc >> 8) & 0xff;
+
+    // Convert the response message to a hex string
+    for (int i = 0; i < msg_len; i++) {
+        ss << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(resp[i]) << " ";
+    }
+
+    respStr = ss.str();
+
+    free(resp);
+    return respStr;
+}
 uint16_t ModbusFunctions::calculate_crc(uint8_t* data, int length) {
     uint16_t crc = 0xFFFF;
     int i, j;

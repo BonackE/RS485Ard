@@ -1,3 +1,11 @@
+label {
+	font-size: 15px;
+	display:flex;
+	flex-direction:column;
+	font-weight:100%;
+}
+
+
 .column {
   display: inline-block;
   width: 45%;
@@ -19,6 +27,8 @@
 
 input[type='number'] {
   width: 40px;
+  height: 30px;
+  font-size:15px;
 }
 
 .contain {
@@ -44,7 +54,7 @@ input[type='number'] {
 
 .section-header {
   text-align: center;
-  font-size: 70%;
+  font-size: 100%;
 }
 
 .table-contain {
@@ -140,7 +150,7 @@ tr:hover {
 .select-items div,
 .select-selected {
   color: #ffffff;
-  padding: 8px 16px;
+  padding: 5px 5px;
   border: 1px solid transparent;
   border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
   cursor: pointer;

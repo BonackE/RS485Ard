@@ -141,6 +141,7 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
     std::string codeString;
 	uint8_t* tab_bits = NULL;
     uint16_t* tab_reg = NULL;
+
     for (int i = 0; i < str.length(); i++) {
         if (str[i] == ',') {
             if (temp[0] == ',') {
@@ -154,410 +155,425 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
     }
     temp.erase(0, 1);
     data.push_back(temp);
-    switch (stoi(data[1])) {
-    case 1:
-    {
-        
-        codeString = "Coils";
-        tab_bits = (uint8_t*)malloc(sizeof(uint8_t) * stoi(data[3]));
-        if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
+    try {
+        switch (stoi(data[1])) {
+        case 1:
+        {
 
-            code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
-                "document.getElementById('result').innerHTML = options;";
-        }
-        std::string hexReq = modbus.getHexReq(MODBUS_FC_READ_COILS, stoi(data[2]), stoi(data[3]));
-        code += "var hexReq = \"" + hexReq + "\";"
-            "try{"
-            "var rawData = document.getElementById('rawData');"
-            "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
-            "var rawRow = rawTbody.insertRow();"
+            codeString = "Coils";
+            tab_bits = (uint8_t*)malloc(sizeof(uint8_t) * stoi(data[3]));
+            if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
 
-            "rawRow.innerHTML = hexReq;"
-            "}catch(error){"
-            "document.getElementById('result').innerHTML = error;"
-            "}";
-        if (modbus_read_bits(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_bits) == -1) {
-
-            code = "var options = \"Read input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
-                "document.getElementById('result').innerHTML = options;";
-
-        }
-        else {
-            std::string resp = modbus.getHexResp(tab_bits, MODBUS_FC_READ_COILS, stoi(data[3]));
-            code += "var hexResp = \"" + resp + "\";"
+                code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
+            }
+            std::string hexReq = modbus.getHexReq(MODBUS_FC_READ_COILS, stoi(data[2]), stoi(data[3]));
+            code += "var hexReq = \"" + hexReq + "\";"
                 "try{"
                 "var rawData = document.getElementById('rawData');"
                 "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
                 "var rawRow = rawTbody.insertRow();"
 
-                "rawRow.innerHTML = hexResp;"
+                "rawRow.innerHTML = hexReq;"
                 "}catch(error){"
                 "document.getElementById('result').innerHTML = error;"
                 "}";
+            if (modbus_read_bits(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_bits) == -1) {
 
-            code += "var options = [\"";
-            for (int i = 0; i < stoi(data[3]); i++) {
-                code += std::to_string(tab_bits[i]);
-                if (i != stoi(data[3]) - 1) {
-                    code += "\",\"";
-                }
+                code = "var options = \"Read input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
+
             }
-            code += "\"];"
-                "try{"
-                "var table = document.getElementById('dataTable');"
-                "var tbody = table.getElementsByTagName('tbody')[0];"
-                "var transTable = document.getElementById('translatedData');"
-                "var transBody = transTable.getElementsByTagName('tbody')[0];"
+            else {
+                std::string resp = modbus.getHexResp(tab_bits, MODBUS_FC_READ_COILS, stoi(data[3]));
+                code += "var hexResp = \"" + resp + "\";"
+                    "try{"
+                    "var rawData = document.getElementById('rawData');"
+                    "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+                    "var rawRow = rawTbody.insertRow();"
 
-                "var codeString = \"" + codeString + "\";"
+                    "rawRow.innerHTML = hexResp;"
+                    "}catch(error){"
+                    "document.getElementById('result').innerHTML = error;"
+                    "}";
 
-                "for(var i = 0 ; i < options.length ; i++) {"
-                "var newRow = tbody.insertRow();"
+                code += "var options = [\"";
+                for (int i = 0; i < stoi(data[3]); i++) {
+                    code += std::to_string(tab_bits[i]);
+                    if (i != stoi(data[3]) - 1) {
+                        code += "\",\"";
+                    }
+                }
+                code += "\"];"
+                    "try{"
+                    "var table = document.getElementById('dataTable');"
+                    "var tbody = table.getElementsByTagName('tbody')[0];"
+                    "var transTable = document.getElementById('translatedData');"
+                    "var transBody = transTable.getElementsByTagName('tbody')[0];"
 
-                "var data = newRow.insertCell(0);"
-                "var register = newRow.insertCell(1);"
-                "var dataNum = newRow.insertCell(2);"
-                "dataNum.contentEditable = true;"
+                    "var codeString = \"" + codeString + "\";"
 
-                "data.innerHTML = codeString;"
-                "register.innerHTML = i;"
-                "dataNum.innerHTML = options[i];"
+                    "for(var i = 0 ; i < options.length ; i++) {"
+                    "var newRow = tbody.insertRow();"
 
+                    "var data = newRow.insertCell(0);"
+                    "var register = newRow.insertCell(1);"
+                    "var dataNum = newRow.insertCell(2);"
+                    "dataNum.contentEditable = true;"
 
-                "}"
-
-                "}"
-                "catch(error){"
-
-                "}";
+                    "data.innerHTML = codeString;"
+                    "register.innerHTML = i;"
+                    "dataNum.innerHTML = options[i];"
 
 
-            String s = view->EvaluateScript("CountRows()");
+                    "}"
 
+                    "}"
+                    "catch(error){"
+
+                    "}";
+
+
+                String s = view->EvaluateScript("CountRows()");
+
+            }
+            break;
         }
-        break;
-    }
-    case 3:
-    {
-        tab_reg = (uint16_t*)malloc(sizeof(uint16_t) * stoi(data[3]));
-        codeString = "Holding Register";
+        case 3:
+        {
+            tab_reg = (uint16_t*)malloc(sizeof(uint16_t) * stoi(data[3]));
+            codeString = "Holding Register";
 
-        if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
+            if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
 
-            code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
-                "document.getElementById('result').innerHTML = options;";
-        }
-        std::string hexReq = modbus.getHexReq(MODBUS_FC_READ_HOLDING_REGISTERS, stoi(data[2]), stoi(data[3]));
-        code += "var hexReq = \"" + hexReq + "\";"
-            "try{"
-            "var rawData = document.getElementById('rawData');"
-            "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
-            "var rawRow = rawTbody.insertRow();"
-
-            "rawRow.innerHTML = hexReq;"
-            "}catch(error){"
-            "document.getElementById('result').innerHTML = error;"
-            "}";
-        if (modbus_read_registers(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_reg) == -1) {
-
-            code = "var options = \"Read input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
-                "document.getElementById('result').innerHTML = options;";
-
-        }
-        else {
-            std::string resp = modbus.getHexResp(tab_reg, MODBUS_FC_READ_HOLDING_REGISTERS, stoi(data[3]));
-            code += "var hexResp = \"" + resp + "\";"
+                code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
+            }
+            std::string hexReq = modbus.getHexReq(MODBUS_FC_READ_HOLDING_REGISTERS, stoi(data[2]), stoi(data[3]));
+            code += "var hexReq = \"" + hexReq + "\";"
                 "try{"
                 "var rawData = document.getElementById('rawData');"
                 "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
                 "var rawRow = rawTbody.insertRow();"
 
-                "rawRow.innerHTML = hexResp;"
+                "rawRow.innerHTML = hexReq;"
                 "}catch(error){"
                 "document.getElementById('result').innerHTML = error;"
                 "}";
+            if (modbus_read_registers(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_reg) == -1) {
 
-
-
-
-            String s = view->EvaluateScript("CountRows()");
-
-            uint16_t tempData[2];
-
-            code += "var regdata = [\"";
-            for (int i = 0; i < stoi(data[3]); i += 2) {
-                tempData[0] = tab_reg[i];
-                tempData[1] = tab_reg[i + 1];
-                code += std::to_string(modbus_get_float_cdab(tempData));
-                if (i != stoi(data[3]) - 1) {
-                    code += "\",\"";
-                }
+                code = "var options = \"Read input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
 
             }
-            code += "\"];";
-            code += "var options = [\"";
-            for (int i = 0; i < stoi(data[3]); i++) {
-                code += std::to_string(tab_reg[i]);
-                if (i != stoi(data[3]) - 1) {
-                    code += "\",\"";
+            else {
+                std::string resp = modbus.getHexResp(tab_reg, MODBUS_FC_READ_HOLDING_REGISTERS, stoi(data[3]));
+                code += "var hexResp = \"" + resp + "\";"
+                    "try{"
+                    "var rawData = document.getElementById('rawData');"
+                    "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+                    "var rawRow = rawTbody.insertRow();"
+
+                    "rawRow.innerHTML = hexResp;"
+                    "}catch(error){"
+                    "document.getElementById('result').innerHTML = error;"
+                    "}";
+
+
+
+
+                String s = view->EvaluateScript("CountRows()");
+
+                uint16_t tempData[2];
+
+                code += "var regdata = [\"";
+                for (int i = 0; i < stoi(data[3]); i += 2) {
+                    tempData[0] = tab_reg[i];
+                    tempData[1] = tab_reg[i + 1];
+                    code += std::to_string(modbus_get_float_cdab(tempData));
+                    if (i != stoi(data[3]) - 1) {
+                        code += "\",\"";
+                    }
+
                 }
+                code += "\"];";
+                code += "var options = [\"";
+                for (int i = 0; i < stoi(data[3]); i++) {
+                    code += std::to_string(tab_reg[i]);
+                    if (i != stoi(data[3]) - 1) {
+                        code += "\",\"";
+                    }
+                }
+                code += "\"];"
+                    "try{"
+                    "var table = document.getElementById('dataTable');"
+                    "var tbody = table.getElementsByTagName('tbody')[0];"
+                    "var transTable = document.getElementById('translatedData');"
+                    "var transBody = transTable.getElementsByTagName('tbody')[0];"
+
+                    "var codeString = \"" + codeString + "\";"
+
+                    "for(var i = 0 ; i < options.length ; i++) {"
+                    "var newRow = tbody.insertRow();"
+
+                    "var data = newRow.insertCell(0);"
+                    "var register = newRow.insertCell(1);"
+                    "var dataNum = newRow.insertCell(2);"
+                    "dataNum.contentEditable = true;"
+
+
+                    "data.innerHTML = codeString;"
+                    "register.innerHTML = i;"
+                    "dataNum.innerHTML = options[i];"
+                    "if(document.getElementById('translatedCheckBox').checked){"
+                    "if(i<options.length/2){"
+                    "var newRow2 = transBody.insertRow();"
+
+
+                    "var registers = newRow2.insertCell(0);"
+                    "var data2 = newRow2.insertCell(1);"
+
+
+                    "var num = i+1;"
+                    "registers.innerHTML = i + \" and \" + num; "
+                    "data2.innerHTML = regdata[i];"
+                    "}"
+                    "}"
+
+
+                    "}"
+
+                    "}"
+                    "catch(error){"
+
+                    "}";
+
             }
-            code += "\"];"
-                "try{"
-                "var table = document.getElementById('dataTable');"
-                "var tbody = table.getElementsByTagName('tbody')[0];"
-                "var transTable = document.getElementById('translatedData');"
-                "var transBody = transTable.getElementsByTagName('tbody')[0];"
-
-                "var codeString = \"" + codeString + "\";"
-
-                "for(var i = 0 ; i < options.length ; i++) {"
-                "var newRow = tbody.insertRow();"
-
-                "var data = newRow.insertCell(0);"
-                "var register = newRow.insertCell(1);"
-                "var dataNum = newRow.insertCell(2);"
-                "dataNum.contentEditable = true;"
-
-
-                "data.innerHTML = codeString;"
-                "register.innerHTML = i;"
-                "dataNum.innerHTML = options[i];"
-                "if(i<options.length/2){"
-                "var newRow2 = transBody.insertRow();"
-
-
-                "var registers = newRow2.insertCell(0);"
-                "var data2 = newRow2.insertCell(1);"
-
-
-                "var num = i+1;"
-                "registers.innerHTML = i + \" and \" + num; "
-                "data2.innerHTML = regdata[i];"
-                "}"
-
-
-                "}"
-
-                "}"
-                "catch(error){"
-
-                "}";
-
+            break;
         }
-        break;
-    }
 
         //switch cases for all function codes
-    case 4:
-    {
+        case 4:
+        {
 
-        //function 4 read input registers
-        tab_reg = (uint16_t*)malloc(sizeof(uint16_t) * stoi(data[3]));
-        codeString = "Input Register";
+            //function 4 read input registers
+            tab_reg = (uint16_t*)malloc(sizeof(uint16_t) * stoi(data[3]));
+            codeString = "Input Register";
 
-        if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
+            if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
 
-            code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
-                "document.getElementById('result').innerHTML = options;";
-        }
-        std::string hexReq = modbus.getHexReq(MODBUS_FC_READ_INPUT_REGISTERS, stoi(data[2]), stoi(data[3]));
-        code += "var hexReq = \"" + hexReq + "\";"
-            "try{"
-            "var rawData = document.getElementById('rawData');"
-            "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
-            "var rawRow = rawTbody.insertRow();"
-
-            "rawRow.innerHTML = hexReq;"
-            "}catch(error){"
-            "document.getElementById('result').innerHTML = error;"
-            "}";
-        if (modbus_read_input_registers(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_reg) == -1) {
-
-            code = "var options = \"Read input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
-                "document.getElementById('result').innerHTML = options;";
-
-        }
-        else {
-            std::string resp = modbus.getHexResp(tab_reg, MODBUS_FC_READ_INPUT_REGISTERS,stoi(data[3]));
-            code += "var hexResp = \"" + resp + "\";"
+                code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
+            }
+            std::string hexReq = modbus.getHexReq(MODBUS_FC_READ_INPUT_REGISTERS, stoi(data[2]), stoi(data[3]));
+            code += "var hexReq = \"" + hexReq + "\";"
                 "try{"
                 "var rawData = document.getElementById('rawData');"
                 "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
                 "var rawRow = rawTbody.insertRow();"
 
-                "rawRow.innerHTML = hexResp;"
+                "rawRow.innerHTML = hexReq;"
                 "}catch(error){"
                 "document.getElementById('result').innerHTML = error;"
                 "}";
+            if (modbus_read_input_registers(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_reg) == -1) {
 
-
-
-
-            String s = view->EvaluateScript("CountRows()");
-
-            uint16_t tempData[2];
-
-            code += "var regdata = [\"";
-            for (int i = 0; i < stoi(data[3]); i += 2) {
-                tempData[0] = tab_reg[i];
-                tempData[1] = tab_reg[i + 1];
-                code += std::to_string(modbus_get_float_abcd(tempData));
-                if (i != stoi(data[3]) - 1) {
-                    code += "\",\"";
-                }
+                code = "var options = \"Read input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
 
             }
-            code += "\"];";
-            code += "var options = [\"";
+            else {
+                std::string resp = modbus.getHexResp(tab_reg, MODBUS_FC_READ_INPUT_REGISTERS, stoi(data[3]));
+                code += "var hexResp = \"" + resp + "\";"
+                    "try{"
+                    "var rawData = document.getElementById('rawData');"
+                    "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+                    "var rawRow = rawTbody.insertRow();"
+
+                    "rawRow.innerHTML = hexResp;"
+                    "}catch(error){"
+                    "document.getElementById('result').innerHTML = error;"
+                    "}";
+
+
+
+
+                String s = view->EvaluateScript("CountRows()");
+
+                uint16_t tempData[2];
+
+                code += "var regdata = [\"";
+                for (int i = 0; i < stoi(data[3]); i += 2) {
+                    tempData[0] = tab_reg[i];
+                    tempData[1] = tab_reg[i + 1];
+                    code += std::to_string(modbus_get_float_abcd(tempData));
+                    if (i != stoi(data[3]) - 1) {
+                        code += "\",\"";
+                    }
+
+                }
+                code += "\"];";
+                code += "var options = [\"";
+                for (int i = 0; i < stoi(data[3]); i++) {
+                    code += std::to_string(tab_reg[i]);
+                    if (i != stoi(data[3]) - 1) {
+                        code += "\",\"";
+                    }
+                }
+                code += "\"];"
+                    "try{"
+                    "var table = document.getElementById('dataTable');"
+                    "var tbody = table.getElementsByTagName('tbody')[0];"
+                    "var transTable = document.getElementById('translatedData');"
+                    "var transBody = transTable.getElementsByTagName('tbody')[0];"
+
+                    "var codeString = \"" + codeString + "\";"
+
+                    "for(var i = 0 ; i < options.length ; i++) {"
+                    "var newRow = tbody.insertRow();"
+
+                    "var data = newRow.insertCell(0);"
+                    "var register = newRow.insertCell(1);"
+                    "var dataNum = newRow.insertCell(2);"
+
+
+                    "data.innerHTML = codeString;"
+                    "register.innerHTML = i;"
+                    "dataNum.innerHTML = options[i];"
+                    "if(document.getElementById('translatedCheckBox').checked){"
+                    "if(i<options.length/2){"
+                    "var newRow2 = transBody.insertRow();"
+
+
+                    "var registers = newRow2.insertCell(0);"
+                    "var data2 = newRow2.insertCell(1);"
+
+
+                    "var num = i+1;"
+                    "registers.innerHTML = i + \" and \" + num; "
+                    "data2.innerHTML = regdata[i];"
+                    "}"
+                    "}"
+
+
+                    "}"
+
+                    "}"
+                    "catch(error){"
+
+                    "}";
+
+            }
+            break;
+        }
+        case 10:
+        {
+            tab_reg = (uint16_t*)malloc(sizeof(uint16_t) * stoi(data[3]));
+
+
+            if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
+
+                code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
+            }
+            String s = view->EvaluateScript("GetCellData()");
+            std::string str = s.utf8().data();
             for (int i = 0; i < stoi(data[3]); i++) {
-                code += std::to_string(tab_reg[i]);
-                if (i != stoi(data[3]) - 1) {
-                    code += "\",\"";
-                }
+                tab_reg[i] = std::stoi(str.substr(0, str.find(",")));
+                str.erase(0, str.find(",") + 1);
             }
-            code += "\"];"
-                "try{"
-                "var table = document.getElementById('dataTable');"
-                "var tbody = table.getElementsByTagName('tbody')[0];"
-                "var transTable = document.getElementById('translatedData');"
-                "var transBody = transTable.getElementsByTagName('tbody')[0];"
-
-                "var codeString = \"" + codeString + "\";"
-
-                "for(var i = 0 ; i < options.length ; i++) {"
-                "var newRow = tbody.insertRow();"
-
-                "var data = newRow.insertCell(0);"
-                "var register = newRow.insertCell(1);"
-                "var dataNum = newRow.insertCell(2);"
-
-
-                "data.innerHTML = codeString;"
-                "register.innerHTML = i;"
-                "dataNum.innerHTML = options[i];"
-                "if(i<options.length/2){"
-                "var newRow2 = transBody.insertRow();"
-
-
-                "var registers = newRow2.insertCell(0);"
-                "var data2 = newRow2.insertCell(1);"
-
-
-                "var num = i+1;"
-                "registers.innerHTML = i + \" and \" + num; "
-                "data2.innerHTML = regdata[i];"
-                "}"
-
-
-                "}"
-
-                "}"
-                "catch(error){"
-
-                "}";
-
-        }
-        break;
-    }
-    case 10:
-    {
-        tab_reg = (uint16_t*)malloc(sizeof(uint16_t) * stoi(data[3]));
-        
-
-        if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
-
-            code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
-                "document.getElementById('result').innerHTML = options;";
-        }
-		String s = view->EvaluateScript("GetCellData()");
-        std::string str = s.utf8().data();
-		for (int i = 0; i < stoi(data[3]); i++) {
-			tab_reg[i] = std::stoi(str.substr(0, str.find(",")));
-			str.erase(0, str.find(",") + 1);
-		}
-        std::string hexReq = modbus.getHexReq(MODBUS_FC_WRITE_MULTIPLE_REGISTERS, stoi(data[2]), stoi(data[3]));
-        code += "var hexReq = \"" + hexReq + "\";"
-            "try{"
-            "var rawData = document.getElementById('rawData');"
-            "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
-            "var rawRow = rawTbody.insertRow();"
-
-            "rawRow.innerHTML = hexReq;"
-            "}catch(error){"
-            "document.getElementById('result').innerHTML = error;"
-            "}";
-		if (modbus_write_registers(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_reg) == -1) {
-			code += "var options = \"Write input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
-				"document.getElementById('result').innerHTML = options;";
-		}
-		else {
-            std::string resp = modbus.getHexResp(tab_reg, MODBUS_FC_WRITE_MULTIPLE_REGISTERS, stoi(data[3]));
-            code += "var hexResp = \"" + resp + "\";"
+            std::string hexReq = modbus.getHexReq(MODBUS_FC_WRITE_MULTIPLE_REGISTERS, stoi(data[2]), stoi(data[3]));
+            code += "var hexReq = \"" + hexReq + "\";"
                 "try{"
                 "var rawData = document.getElementById('rawData');"
                 "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
                 "var rawRow = rawTbody.insertRow();"
 
-                "rawRow.innerHTML = hexResp;"
+                "rawRow.innerHTML = hexReq;"
                 "}catch(error){"
                 "document.getElementById('result').innerHTML = error;"
                 "}";
-			code += "var options = \"Write input registers successed\";"
-				"document.getElementById('result').innerHTML = options;";
-		}
+            if (modbus_write_registers(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_reg) == -1) {
+                code += "var options = \"Write input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
+            }
+            else {
+                int count = 0;
+				for (int i = 0; i < stoi(data[3]); i++) {
+					if (tab_reg[i] != 0) {
+						count++;
+					}
+				}
+                std::string resp = modbus.getHexRespWrite(tab_reg, MODBUS_FC_WRITE_MULTIPLE_REGISTERS, stoi(data[3]), stoi(data[2]), count);
+                code += "var hexResp = \"" + resp + "\";"
+                    "try{"
+                    "var rawData = document.getElementById('rawData');"
+                    "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+                    "var rawRow = rawTbody.insertRow();"
 
-        break;
-    }
-    case 0x0F: 
-    {
-        tab_bits = (uint8_t*)malloc(sizeof(uint8_t) * stoi(data[3]));
+                    "rawRow.innerHTML = hexResp;"
+                    "}catch(error){"
+                    "document.getElementById('result').innerHTML = error;"
+                    "}";
+                code += "var options = \"Write input registers successed\";"
+                    "document.getElementById('result').innerHTML = options;";
+            }
 
-
-        if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
-
-            code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
-                "document.getElementById('result').innerHTML = options;";
+            break;
         }
-        String s = view->EvaluateScript("GetCellData()");
-        std::string str = s.utf8().data();
-        for (int i = 0; i < stoi(data[3]); i++) {
-            tab_bits[i] = std::stoi(str.substr(0, str.find(",")));
-            str.erase(0, str.find(",") + 1);
-        }
-        std::string hexReq = modbus.getHexReq(MODBUS_FC_WRITE_MULTIPLE_COILS, stoi(data[2]), stoi(data[3]));
-        code += "var hexReq = \"" + hexReq + "\";"
-            "try{"
-            "var rawData = document.getElementById('rawData');"
-            "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
-            "var rawRow = rawTbody.insertRow();"
+        case 0x0F:
+        {
+            tab_bits = (uint8_t*)malloc(sizeof(uint8_t) * stoi(data[3]));
 
-            "rawRow.innerHTML = hexReq;"
-            "}catch(error){"
-            "document.getElementById('result').innerHTML = error;"
-            "}";
-        if (modbus_write_bits(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_bits) == -1) {
-            code += "var options = \"Write input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
-                "document.getElementById('result').innerHTML = options;";
-        }
-        else {
-            std::string resp = modbus.getHexResp(tab_bits, MODBUS_FC_WRITE_MULTIPLE_COILS, stoi(data[3]));
-            code += "var hexResp = \"" + resp + "\";"
+
+            if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
+
+                code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
+            }
+            String s = view->EvaluateScript("GetCellData()");
+            std::string str = s.utf8().data();
+            for (int i = 0; i < stoi(data[3]); i++) {
+                tab_bits[i] = std::stoi(str.substr(0, str.find(",")));
+                str.erase(0, str.find(",") + 1);
+            }
+            std::string hexReq = modbus.getHexReq(MODBUS_FC_WRITE_MULTIPLE_COILS, stoi(data[2]), stoi(data[3]));
+            code += "var hexReq = \"" + hexReq + "\";"
                 "try{"
                 "var rawData = document.getElementById('rawData');"
                 "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
                 "var rawRow = rawTbody.insertRow();"
 
-                "rawRow.innerHTML = hexResp;"
+                "rawRow.innerHTML = hexReq;"
                 "}catch(error){"
                 "document.getElementById('result').innerHTML = error;"
                 "}";
-            code += "var options = \"Write cois succeeded\";"
-                "document.getElementById('result').innerHTML = options;";
+            if (modbus_write_bits(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_bits) == -1) {
+                code += "var options = \"Write input registers failed: " + std::string(modbus_strerror(errno)) + "\";"
+                    "document.getElementById('result').innerHTML = options;";
+            }
+            else {
+                std::string resp = modbus.getHexResp(tab_bits, MODBUS_FC_WRITE_MULTIPLE_COILS, stoi(data[3]));
+                code += "var hexResp = \"" + resp + "\";"
+                    "try{"
+                    "var rawData = document.getElementById('rawData');"
+                    "var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+                    "var rawRow = rawTbody.insertRow();"
+
+                    "rawRow.innerHTML = hexResp;"
+                    "}catch(error){"
+                    "document.getElementById('result').innerHTML = error;"
+                    "}";
+                code += "var options = \"Write coils succeeded\";"
+                    "document.getElementById('result').innerHTML = options;";
+            }
+            break;
         }
-        break;
-    }
         }
+	}
+	catch (...) {
+        code += "document.getElementById('result').innerHTML = \"Invalid Input\";";
+	}
     
     
     
