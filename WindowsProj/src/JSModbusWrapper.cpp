@@ -285,18 +285,32 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
                 String s = view->EvaluateScript("CountRows()");
 
                 uint16_t tempData[2];
-
-                code += "var regdata = [\"";
+                String floatsFunc = view->EvaluateScript("GetTranslatedRead()");
+                std::string floats = floatsFunc.utf8().data();
+                
+                code += "if(document.getElementById('translatedCheckBox').checked){"
+                    "var regdata = [\"";
                 for (int i = 0; i < stoi(data[3]); i += 2) {
                     tempData[0] = tab_reg[i];
                     tempData[1] = tab_reg[i + 1];
-                    code += std::to_string(modbus_get_float_cdab(tempData));
+                    if (floats == "abcd") {
+                        code += std::to_string(modbus_get_float_abcd(tempData));
+                    }
+                    else if (floats == "cdab") {
+                        code += std::to_string(modbus_get_float_cdab(tempData));
+                    }
+                    else if (floats == "badc") {
+                        code += std::to_string(modbus_get_float_badc(tempData));
+                    }
+                    else if (floats == "dcba") {
+                        code += std::to_string(modbus_get_float_dcba(tempData));
+                    }
                     if (i != stoi(data[3]) - 1) {
                         code += "\",\"";
                     }
 
                 }
-                code += "\"];";
+                code += "\"];}";
                 code += "var options = [\"";
                 for (int i = 0; i < stoi(data[3]); i++) {
                     code += std::to_string(tab_reg[i]);
@@ -401,18 +415,31 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
                 String s = view->EvaluateScript("CountRows()");
 
                 uint16_t tempData[2];
-
-                code += "var regdata = [\"";
+                String floatsFunc = view->EvaluateScript("GetTranslatedRead()");
+                std::string floats = floatsFunc.utf8().data();
+                code += "if(document.getElementById('translatedCheckBox').checked){"
+                    "var regdata = [\"";
                 for (int i = 0; i < stoi(data[3]); i += 2) {
                     tempData[0] = tab_reg[i];
                     tempData[1] = tab_reg[i + 1];
-                    code += std::to_string(modbus_get_float_abcd(tempData));
+                    if (floats == "abcd") {
+                        code += std::to_string(modbus_get_float_abcd(tempData));
+					}
+					else if (floats == "cdab") {
+						code += std::to_string(modbus_get_float_cdab(tempData));
+					}
+                    else if (floats == "badc") {
+                        code += std::to_string(modbus_get_float_badc(tempData));
+                    }
+                    else if (floats == "dcba") {
+                        code += std::to_string(modbus_get_float_dcba(tempData));
+                    }
                     if (i != stoi(data[3]) - 1) {
                         code += "\",\"";
                     }
 
                 }
-                code += "\"];";
+                code += "\"];}";
                 code += "var options = [\"";
                 for (int i = 0; i < stoi(data[3]); i++) {
                     code += std::to_string(tab_reg[i]);
