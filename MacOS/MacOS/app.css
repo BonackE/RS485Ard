@@ -29,10 +29,19 @@ input[type='number'] {
   padding: 10px;
   margin: 10px;
 }
+
 .toolbar {
     text-align: right;
 }
 
+.userLog {
+    text-align: right;
+    padding-right: 54px;
+}
+
+#userLog {
+    font-size: 12px;
+}
 
 .settingsContainer {
   display: flex;

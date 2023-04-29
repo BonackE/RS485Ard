@@ -131,7 +131,7 @@ struct HTMLView: NSViewRepresentable {
                 }
             }
             // connect to the modbus
-            if message.name == "Connect", let jsonString = message.body as? String {
+            if message.name == "Connect", let jsonString = message.body as? String, let webview = message.webView {
                 
                 // use the 'JSONDecoder' class to decode the JSON data into the 'ModbusConfig' struct
                 let jsonData = jsonString.data(using: .utf8)!
@@ -142,8 +142,34 @@ struct HTMLView: NSViewRepresentable {
                     modbus = Modbus(device: config.serialPort, baudRate: config.baudRate, parity: config.parity,
                                     dataBits: config.dataBits, stopBits: config.stopBits)
                     
-                    modbus_set_slave(modbus.modbus, config.slaveId)
-
+                    // output connection success/failure
+                    var data = String();
+                    if (modbus.modbus == nil) {
+                        data = "Unable to create libmodbus context."
+                    }
+                    else if (modbus_connect(modbus.modbus) == -1) {
+                        let cString = modbus_strerror(errno)!;
+                        let swiftString = String(cString: cString);
+                        data = "Connection failed: \(swiftString)";
+                        
+                        modbus_free(modbus.modbus);
+                    } else {
+                        data = "Connected to: \(config.serialPort)";
+                    }
+                    
+                    let script = "displayUserLog('\(data)');"
+                                        
+                    webview.evaluateJavaScript(script) { result, error in
+                        if let error = error {
+                            print("Error: \(error.localizedDescription)")
+                        } else {
+                            print("Result: \(result ?? "")")
+                        }
+                    }
+                    
+                    
+                    
+                    
                 } catch {
                     print("Error decoding JSON data: \(error)")
                 }

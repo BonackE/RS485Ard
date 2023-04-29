@@ -102,7 +102,11 @@ function handlePortsData(ports) {
   }
 }
 
-function readInput() {
-  var myElement = document.getElementById('inputReg')
-  myElement.innerHTML = 'Button Clicked.'
+// display a log for the user
+function displayUserLog(data) {
+        if (typeof data === 'string') {
+           document.getElementById('userLog').innerHTML = data;
+       } else {
+           console.error('Error: displayUserLog() expected a string but received ' + typeof data);
+       }
 }
