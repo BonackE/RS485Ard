@@ -1,7 +1,7 @@
 #include "MyApp.h"
 
 #define WINDOW_WIDTH  1200
-#define WINDOW_HEIGHT 600
+#define WINDOW_HEIGHT 850
 
 JSValueRef LoadPorts(JSContextRef ctx, JSObjectRef function,
     JSObjectRef thisObject, size_t argumentCount,
@@ -37,7 +37,7 @@ MyApp::MyApp() {
   /// kWindowFlags_Resizable.
   ///
   window_ = Window::Create(app_->main_monitor(), WINDOW_WIDTH, WINDOW_HEIGHT,
-    false, kWindowFlags_Titled | kWindowFlags_Resizable);
+    false, kWindowFlags_Titled);
 
   ///
   /// Create our HTML overlay-- we don't care about its initial size and

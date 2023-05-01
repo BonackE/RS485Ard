@@ -10,6 +10,14 @@ function GetOptions() {
     }
     return result;
 }
+function GetTime(){
+
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+  var dateTime = date+' '+time;
+  return dateTime;
+}
 function refreshPorts(){
     var ports = document.getElementsByClassName("select-selected");
 
@@ -166,14 +174,14 @@ function load(){
             document.getElementById('dataTable').getElementsByTagName('tbody')[0].deleteRow(0);
           }
         }
-
+       
     }
 
     function ClearTransData(data){
       while(document.getElementById(data).getElementsByTagName('tbody')[0].rows.length>0){
         document.getElementById(data).getElementsByTagName('tbody')[0].deleteRow(0);
       }
-
+      
     }
     function GetCellData(){
       var data = "";

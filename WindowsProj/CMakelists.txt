@@ -21,5 +21,7 @@ add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/assets/" "${ASSETS_PATH}")
 add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${ULTRA_RSC_DIR}" "${ASSETS_PATH}/resources")
+add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/" $<TARGET_FILE_DIR:${CMAKE_PROJECT_NAME}>)
 include_directories(${MODBUS_INCLUDES} ${ULTRA_INCLUDES})
 target_link_libraries(ModbusDemo PUBLIC modbus PUBLIC UltralightCore PUBLIC AppCore PUBLIC Ultralight PUBLIC WebCore)
