@@ -93,12 +93,15 @@ struct HTMLView: NSViewRepresentable {
         
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
             // define a struct that matches the format of the JSON data
-            struct ModbusConfig : Codable {
+            struct ConnectConfig : Codable {
                 let serialPort: String
                 let baudRate: Int32
                 let dataBits: Int32
                 let stopBits: Int32
                 let parity: CChar
+            }
+            
+            struct ModbusConfig : Codable {
                 let slaveId: Int32
                 let functionCode: Int32
                 let startAddr: Int32
@@ -138,7 +141,7 @@ struct HTMLView: NSViewRepresentable {
                 print(jsonData)
                 let decoder = JSONDecoder()
                 do {
-                    let config = try decoder.decode(ModbusConfig.self, from: jsonData)
+                    let config = try decoder.decode(ConnectConfig.self, from: jsonData)
                     modbus = Modbus(device: config.serialPort, baudRate: config.baudRate, parity: config.parity,
                                     dataBits: config.dataBits, stopBits: config.stopBits)
                     

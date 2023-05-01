@@ -29,11 +29,11 @@ function parseInt8(value) {
 }
 
 // formatting data to send to controller
-const form = document.getElementById('modbus-form')
-form.addEventListener('submit', function (event) {
+const connectForm = document.getElementById('connect-form')
+connectForm.addEventListener('submit', function (event) {
   event.preventDefault()
 
-  const formData = new FormData(form)
+  const formData = new FormData(connectForm)
 
   const numericFields = [
     'baudRate',
@@ -70,6 +70,49 @@ form.addEventListener('submit', function (event) {
   display(jsonData)
 
   window.webkit.messageHandlers.Connect.postMessage(jsonData)
+})
+
+const modbusForm = document.getElementById('modbus-form')
+modbusForm.addEventListener('submit', function (event) {
+  event.preventDefault()
+
+  const formData = new FormData(modbusForm)
+
+  const numericFields = [
+    'baudRate',
+    'dataBits',
+    'stopBits',
+    'slaveId',
+    'functionCode',
+    'startAddr',
+    'numCoils',
+  ]
+  const int8Field = ['parity']
+
+  const data = {}
+
+  for (let field of formData.entries()) {
+    if (numericFields.includes(field[0])) {
+      const value = parseInt(field[1])
+      if (isNaN(value)) {
+        // Handle invalid number value here, such as throwing an error or setting a default value
+        display('invalid number value')
+      } else {
+        data[field[0]] = value
+      }
+    } else {
+      if (int8Field.includes(field[0])) {
+        const value = field[1].charCodeAt(0)
+        data[field[0]] = value
+      } else {
+        data[field[0]] = field[1]
+      }
+    }
+  }
+  const jsonData = JSON.stringify(data)
+  display(jsonData)
+
+  window.webkit.messageHandlers.ModbusReq.postMessage(jsonData)
 })
 
 // call to Swift to LoadPorts()

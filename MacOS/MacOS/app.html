@@ -11,14 +11,10 @@
   </head>
   <body onload="LoadPorts();">
     <div class="parent-container">
-      <div class="toolbar">
-        <button onclick="GetOptions();">Connect</button>
-        <button onclick="LoadPorts();">Refresh Ports</button>
-      </div>
       <div>
         <div class="column">
           <div class="contain">
-        <form id="modbus-form">
+        <form id="connect-form">
             <p class="section-header">Settings</p>
             <div class="settingsContainer">
               <div class="settings">
@@ -66,12 +62,17 @@
                 </select>
               </div>
             </div>
-<!--            <div style="float: right;">-->
-<!--                        <button onclick="GetOptions();">Connect</button>-->
-<!--                        <button onclick="LoadPorts();">Refresh Ports</button>-->
-<!--            </div>-->
-          </div>
 
+            <div class="settingsContainer">
+                <div style="display: flex; flex-direction: row-reverse; width: 100%; padding-top: 10px;">
+                    <input type="submit" value="Connect"></input>
+                    <button onclick="LoadPorts();">Refresh Ports</button>
+                </div>
+            </div>
+          </div>
+          </form>
+          
+          <form id="modbus-form">
           <div class="contain">
             <p class="section-header">Modbus Request</p>
 
@@ -104,15 +105,13 @@
               </div>
             </div>
             <div style="display: flex; flex-direction: row-reverse; align-items: center;">
-                <p style="font-size: 60%">Display Hex Data</p>
+                <p style="font-size: 60%">Display Translated Data</p>
                 <input type="checkbox" name="hex-data-checkbox" value="display-hex-data" checked="checked"
                     style="padding-top: 3px;"></input>
             </div>
 
             <div class="settingsContainer">
-    
-                    <input type="text" disabled="true" id="hex-data" style="width: max-width"></input>
-                    <div style="float: right">
+                    <div style="display:flex; flex-direction: row-reverse; width: 100%;">
                         <input type="submit" value="Send"></input>
                     </div>
             </div>
