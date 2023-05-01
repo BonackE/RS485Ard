@@ -35,14 +35,6 @@ class Modbus : ObservableObject {
         if modbus == nil{
             print("failed")
         }
-
-
-
-        if modbus_connect(modbus) == -1{
-            let errorMessage = String(cString: modbus_strerror(errno))
-            print("failed connection: \(errorMessage)")
-            modbus_free(modbus)
-        }
         
         
     }

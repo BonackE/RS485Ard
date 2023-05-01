@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EBCE90032A0022E300128273 /* libmodbus.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FFC7E9C22A001C3500EB41A1 /* libmodbus.5.dylib */; };
+		EBCE90052A00237500128273 /* libmodbus.5 2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EBCE90042A00237500128273 /* libmodbus.5 2.dylib */; };
 		EBD45C5229DC6C5F00D55FB3 /* app.js in Resources */ = {isa = PBXBuildFile; fileRef = EBD45C5129DC6C5F00D55FB3 /* app.js */; };
 		EBD45C5629DC6D2300D55FB3 /* app.css in Resources */ = {isa = PBXBuildFile; fileRef = EBD45C5529DC6D2300D55FB3 /* app.css */; };
 		FF86141E29BFD8FA005A19DD /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF86141D29BFD8FA005A19DD /* WebKit.framework */; };
@@ -18,7 +20,6 @@
 		FF908B0529BF7DFD00BCAA6C /* MacOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF908B0429BF7DFD00BCAA6C /* MacOSTests.swift */; };
 		FF908B0F29BF7DFD00BCAA6C /* MacOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF908B0E29BF7DFD00BCAA6C /* MacOSUITests.swift */; };
 		FF908B1129BF7DFD00BCAA6C /* MacOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF908B1029BF7DFD00BCAA6C /* MacOSUITestsLaunchTests.swift */; };
-		FFC7E9C32A001C3600EB41A1 /* libmodbus.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = FFC7E9C22A001C3500EB41A1 /* libmodbus.5.dylib */; };
 		FFC7E9C42A001C3600EB41A1 /* libmodbus.5.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = FFC7E9C22A001C3500EB41A1 /* libmodbus.5.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		EBCE90042A00237500128273 /* libmodbus.5 2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libmodbus.5 2.dylib"; sourceTree = "<group>"; };
 		EBD45C5129DC6C5F00D55FB3 /* app.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = app.js; sourceTree = "<group>"; };
 		EBD45C5529DC6D2300D55FB3 /* app.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = app.css; sourceTree = "<group>"; };
 		FF86141D29BFD8FA005A19DD /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
@@ -78,8 +80,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBCE90052A00237500128273 /* libmodbus.5 2.dylib in Frameworks */,
+				EBCE90032A0022E300128273 /* libmodbus.5.dylib in Frameworks */,
 				FF86141E29BFD8FA005A19DD /* WebKit.framework in Frameworks */,
-				FFC7E9C32A001C3600EB41A1 /* libmodbus.5.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +168,7 @@
 		FF908B1D29BF7EFB00BCAA6C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EBCE90042A00237500128273 /* libmodbus.5 2.dylib */,
 				FFC7E9C22A001C3500EB41A1 /* libmodbus.5.dylib */,
 				FF86141D29BFD8FA005A19DD /* WebKit.framework */,
 			);
@@ -462,6 +466,10 @@
 		FF908B1529BF7DFD00BCAA6C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					arm64,
+					"$(ARCHS_STANDARD)",
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -485,7 +493,7 @@
 				MARKETING_VERSION = 1.0;
 				NEW_SETTING = "";
 				NEW_SETTING2 = "";
-				"OTHER_LDFLAGS[arch=*]" = "-lmodbus";
+				OTHER_LDFLAGS = "-lmodbus.5";
 				PRODUCT_BUNDLE_IDENTIFIER = Management.MacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -501,6 +509,10 @@
 		FF908B1629BF7DFD00BCAA6C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					arm64,
+					"$(ARCHS_STANDARD)",
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -524,7 +536,7 @@
 				MARKETING_VERSION = 1.0;
 				NEW_SETTING = "";
 				NEW_SETTING2 = "";
-				"OTHER_LDFLAGS[arch=*]" = "-lmodbus";
+				OTHER_LDFLAGS = "-lmodbus.5";
 				PRODUCT_BUNDLE_IDENTIFIER = Management.MacOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
