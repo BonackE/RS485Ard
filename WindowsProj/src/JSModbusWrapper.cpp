@@ -519,7 +519,57 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
 			}
 			break;
 		}
-		case 10:
+		case 0x0F:
+		{
+			tab_bits = new uint8_t[stoi(data[3])];
+
+
+			if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
+
+				code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
+					"document.getElementById('result').innerHTML = options;";
+			}
+			else {
+				String s = view->EvaluateScript("GetCellData()");
+				std::string str = s.utf8().data();
+				for (int i = 0; i < stoi(data[3]); i++) {
+					tab_bits[i] = std::stoi(str.substr(0, str.find(",")));
+					str.erase(0, str.find(",") + 1);
+				}
+				std::string hexReq = modbus.getHexReq(MODBUS_FC_WRITE_MULTIPLE_COILS, stoi(data[2]), stoi(data[3]), tab_bits);
+				code += "var hexReq = \"" + hexReq + "\";"
+					"try{"
+					"var rawData = document.getElementById('rawData');"
+					"var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+					"var rawRow = rawTbody.insertRow();"
+
+					"rawRow.innerHTML = hexReq;"
+					"}catch(err){"
+					"document.getElementById('result').innerHTML = err.message;"
+					"}";
+				if (modbus_write_bits(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_bits) == -1) {
+					code += "var options = \"Write coils failed: " + std::string(modbus_strerror(errno)) + "\";"
+						"document.getElementById('result').innerHTML = options;";
+				}
+				else {
+					std::string resp = modbus.getHexResp();
+					code += "var hexResp = \"" + resp + "\";"
+						"try{"
+						"var rawData = document.getElementById('rawData');"
+						"var rawTbody = rawData.getElementsByTagName('tbody')[0];"
+						"var rawRow = rawTbody.insertRow();"
+
+						"rawRow.innerHTML = hexResp;"
+						"}catch(err){"
+						"document.getElementById('result').innerHTML = err.message;"
+						"}";
+					code += "var options = \"Write coils succeeded\";"
+						"document.getElementById('result').innerHTML = options;";
+				}
+			}
+			break;
+		}
+		case 0x10:
 		{
 			tab_reg = new uint16_t[stoi(data[3])];
 
@@ -570,56 +620,6 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
 						"document.getElementById('result').innerHTML = err.message;"
 						"}";
 					code += "var options = \"Write input registers succeeded\";"
-						"document.getElementById('result').innerHTML = options;";
-				}
-			}
-			break;
-		}
-		case 0x0F:
-		{
-			tab_bits = new uint8_t[stoi(data[3])];
-
-
-			if (modbus_set_slave(modbus.ctx, stoi(data[0])) == -1) {
-
-				code = "var options = \"Set slave failed: " + std::string(modbus_strerror(errno)) + "\";"
-					"document.getElementById('result').innerHTML = options;";
-			}
-			else {
-				String s = view->EvaluateScript("GetCellData()");
-				std::string str = s.utf8().data();
-				for (int i = 0; i < stoi(data[3]); i++) {
-					tab_bits[i] = std::stoi(str.substr(0, str.find(",")));
-					str.erase(0, str.find(",") + 1);
-				}
-				std::string hexReq = modbus.getHexReq(MODBUS_FC_WRITE_MULTIPLE_COILS, stoi(data[2]), stoi(data[3]), tab_bits);
-				code += "var hexReq = \"" + hexReq + "\";"
-					"try{"
-					"var rawData = document.getElementById('rawData');"
-					"var rawTbody = rawData.getElementsByTagName('tbody')[0];"
-					"var rawRow = rawTbody.insertRow();"
-
-					"rawRow.innerHTML = hexReq;"
-					"}catch(err){"
-					"document.getElementById('result').innerHTML = err.message;"
-					"}";
-				if (modbus_write_bits(modbus.ctx, stoi(data[2]), stoi(data[3]), tab_bits) == -1) {
-					code += "var options = \"Write coils failed: " + std::string(modbus_strerror(errno)) + "\";"
-						"document.getElementById('result').innerHTML = options;";
-				}
-				else {
-					std::string resp = modbus.getHexResp();
-					code += "var hexResp = \"" + resp + "\";"
-						"try{"
-						"var rawData = document.getElementById('rawData');"
-						"var rawTbody = rawData.getElementsByTagName('tbody')[0];"
-						"var rawRow = rawTbody.insertRow();"
-
-						"rawRow.innerHTML = hexResp;"
-						"}catch(err){"
-						"document.getElementById('result').innerHTML = err.message;"
-						"}";
-					code += "var options = \"Write coils succeeded\";"
 						"document.getElementById('result').innerHTML = options;";
 				}
 			}
