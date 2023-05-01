@@ -4,11 +4,7 @@
 #define MAX_MESSAGE_LENGTH 260
 //Function only works for windows, will need to be changed for other OS
 //Returns a vector of strings containing all serial ports on the system (that are being used)
-typedef enum {
-	_STEP_FUNCTION,
-	_STEP_META,
-	_STEP_DATA
-} _step_t;
+
 std::vector<std::string> ModbusFunctions::getSerialPorts() {
 	std::vector<std::string> port_list;
 
@@ -33,7 +29,8 @@ std::vector<std::string> ModbusFunctions::getSerialPorts() {
 	return port_list;
 
 }
-//Function to return a string of hex values from a uint16_t array
+//Function to return a string of hex values from a request modbus backend, requires 
+//the uint16_t array that's to be filled with data
 std::string ModbusFunctions::getHexReq(int function, int addr, int nb, uint16_t* src){
 	if (ctx == NULL) {
 		return "No Context";
@@ -66,6 +63,8 @@ std::string ModbusFunctions::getHexReq(int function, int addr, int nb, uint16_t*
 	
 	
 }
+//Function to return a string of hex values from a request modbus backend, requires
+//the uint8_t array (bits functions) to be filled with data
 std::string ModbusFunctions::getHexReq(int function, int addr, int nb, uint8_t* src) {
 	int req_length;
 	uint8_t req[MAX_MESSAGE_LENGTH];
@@ -107,6 +106,8 @@ std::string ModbusFunctions::getHexReq(int function, int addr, int nb, uint8_t* 
 
 
 }
+//Function to return a string of hex values, requires no input because response is built in real time
+//With the contexts response array that's now part of the modbus context.
 std::string ModbusFunctions::getHexResp() {
     std::stringstream ss;
     std::string respStr = "";
