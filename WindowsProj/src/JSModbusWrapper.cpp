@@ -365,7 +365,7 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
 						"var registers = newRow2.insertCell(0);"
 						"var data2 = newRow2.insertCell(1);"
 						"var date = newRow2.insertCell(2);"
-						"var regNum = i + " + data[2] + ";"
+						"var regNum =2* i + " + data[2] + ";"
 						"var num = regNum+1;"
 						"registers.innerHTML = regNum + \" and \" + num; "
 						"data2.innerHTML = regdata[i];"
@@ -498,7 +498,7 @@ JSValueRef JSModbusWrapper::RequestFunc(JSContextRef ctx) {
 						"var data2 = newRow2.insertCell(1);"
 						"var date = newRow2.insertCell(2);"
 
-						"var regNum = i + " + data[2] + ";"
+						"var regNum =2* i + " + data[2] + ";"
 						"var num = regNum+1;"
 						"registers.innerHTML = regNum + \" and \" + num; "
 						"data2.innerHTML = regdata[i];"
