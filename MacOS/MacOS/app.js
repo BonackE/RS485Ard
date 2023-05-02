@@ -145,6 +145,33 @@ function handlePortsData(ports) {
   }
 }
 
+function ClearTableRows(tableId) {
+    let table = document.getElementById(tableId);
+    while(table.rows.length > 0) {
+      table.deleteRow(0);
+    }
+}
+
+function InsertRow(tableId, data) {
+    try {
+        if (tableId == "register-data-table") {
+            
+        } else if (tableId == "raw-data-table") {
+            var table = document.getElementById(tableId);
+            var tbody = table.getElementsByTagName('tbody')[0];
+            var row = tbody.insertRow();
+            
+            row.innerHTML = data;
+        } else if (tableId == "translated-data-table") {
+                
+        } else {
+            console.error("Invalid tableId");
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 // display a log for the user
 function displayUserLog(data) {
         if (typeof data === 'string') {

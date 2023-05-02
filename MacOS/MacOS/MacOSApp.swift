@@ -36,7 +36,6 @@ class Modbus : ObservableObject {
             print("failed")
         }
         
-        
     }
 }
 
