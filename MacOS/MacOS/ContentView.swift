@@ -209,10 +209,13 @@ struct HTMLView: NSViewRepresentable {
                         let rc = modbus_read_bits(modbus.modbus, config.startAddr, config.numCoils, &bits)
                         
                         print("bits: \(bits)");
-//                        if (rc < 0) { // an error occurred.
-//                            print("rc < 0")
-//                            break;
-//                        }
+                        if (rc < 0) { // an error occurred.
+                            let cString = modbus_strerror(errno)!;
+                            let swiftString = String(cString: cString);
+                            
+                            print(swiftString)
+                            break;
+                        }
 //
                         webview.evaluateJavaScript("displayUserLog('\(bits)');") { result, error in
                             if let error = error {
