@@ -5,13 +5,17 @@ Ultralight is supplied to create an ease of access GUI for Windows.
 
 MacOS does not provide Ultralight and is in Swift language.
 
-Prerequisites:
-  - Need CMake to create Windows portion of the program.
-https://cmake.org/download/
+Prerequisites (WINDOWS):
+  - CMake https://cmake.org/download/
+  - Visual Studio
+
 To install:
   1. Make a build directory in the main file.
   2. Run the following commands:
-    cmake ..
-    cmake --build . --config Release
+     - cmake ..
+     - cmake --build . --config Release
   3. That's it, from there, feel free to edit the code all you want. This is an open source project.
 
+Windows Problems and Future Projects:
+- Currently the program only supports function codes 1,3,4,15,16
+- If your program build is not displaying libmodbus Errors, make sure to enable the release build with Multi-Threaded Debug Dll's (/MDd)
