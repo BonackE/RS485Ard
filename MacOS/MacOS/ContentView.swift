@@ -216,8 +216,8 @@ struct HTMLView: NSViewRepresentable {
                             print(swiftString)
                             break;
                         }
-//
-                        webview.evaluateJavaScript("displayUserLog('\(bits)');") { result, error in
+
+                        webview.evaluateJavaScript("InsertRow('raw-data-table', \(bits));") { result, error in
                             if let error = error {
                                 print("Error: \(error.localizedDescription)")
                             } else {
@@ -227,8 +227,11 @@ struct HTMLView: NSViewRepresentable {
                         
                         break;
                     case 3: // read multiple holding reg.
+                        
                         break;
                     case 4: // read input reg.
+                        
+                        
                         break;
                     case 15: // write multiple coils
                         break;

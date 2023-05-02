@@ -121,7 +121,7 @@
           <div class="contain">
             <p class="section-header">Registers</p>
             <div class="table-contain">
-              <table id="dataTable">
+              <table id="register-data-table">
                 <thead>
                   <tr>
                     <th>Data type</th>
@@ -142,11 +142,11 @@
             </div>
             <div style="margin: 10px; width: 95%; padding: 3px;">
                 <p class="table-header">Raw Data Received:</p>
-                <button style="float: right">Clear</button></thead>
+                <button style="float: right" onClick="ClearTableRows('raw-data-table')">Clear</button></thead>
                 </div>
             <div class="table-contain">
 
-              <table>
+              <table id="raw-data-table">
                   <thead></thead>
                   
                 <tbody>
@@ -157,10 +157,10 @@
             <hr />
             <div style="margin: 10px; width: 95%; padding: 3px;">
                 <p class="table-header">Modbus requests/responses:</p>
-                <button style="float: right">Clear</button>
+                <button style="float: right" onClick="ClearTableRows('modbus-req-res-table')">Clear</button>
             </div>
               <div class="table-contain">
-                <table>
+                <table id="modbus-req-res-table">
                   <thead>
                     <tr>
                       <th>I/O</th>
