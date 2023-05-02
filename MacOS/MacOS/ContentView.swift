@@ -136,14 +136,13 @@ struct HTMLView: NSViewRepresentable {
             // connect to the modbus
             if message.name == "Connect", let jsonString = message.body as? String, let webview = message.webView {
                 
-                // use the 'JSONDecoder' class to decode the JSON data into the 'ModbusConfig' struct
+                // use the 'JSONDecoder' class to decode the JSON data into the 'ConnectConfig' struct
                 let jsonData = jsonString.data(using: .utf8)!
                 print(jsonData)
                 let decoder = JSONDecoder()
                 do {
                     let config = try decoder.decode(ConnectConfig.self, from: jsonData)
-                    modbus = Modbus(device: config.serialPort, baudRate: config.baudRate, parity: config.parity,
-                                    dataBits: config.dataBits, stopBits: config.stopBits)
+                    modbus = Modbus(device: config.serialPort, baudRate: config.baudRate, parity: config.parity, dataBits: config.dataBits, stopBits: config.stopBits)
                     
                     // output connection success/failure
                     var data = String();
@@ -170,12 +169,39 @@ struct HTMLView: NSViewRepresentable {
                         }
                     }
                     
+                } catch {
+                    print("Error decoding JSON data: \(error)")
+                }
+            }
+            
+            if message.name == "ModbusReq", let jsonString = message.body as? String, let webview = message.webView {
+                // use the 'JSONDecoder' class to decode the JSON data into the 'ModbusConfig' struct
+                let jsonData = jsonString.data(using: .utf8)!
+                print(jsonData)
+                let decoder = JSONDecoder()
+                do {
+                    let config = try decoder.decode(ModbusConfig.self, from: jsonData)
                     
+                    switch (config.functionCode) {
+                    case 1: // read coils
+                        break;
+                    case 3: // read multiple holding reg.
+                        break;
+                    case 4: // read input reg.
+                        break;
+                    case 15: // write multiple coils
+                        break;
+                    case 16: // write multiple holding reg
+                        break;
+                    default:
+                        break;
+                    }
                     
                     
                 } catch {
                     print("Error decoding JSON data: \(error)")
                 }
+                
             }
         }
     }
