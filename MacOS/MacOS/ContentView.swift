@@ -56,6 +56,7 @@ struct HTMLView: NSViewRepresentable {
         userContentController.add(context.coordinator, name: "console")
         userContentController.add(context.coordinator, name: "LoadPorts")
         userContentController.add(context.coordinator, name: "Connect")
+        userContentController.add(context.coordinator, name: "ModbusReq")
         
         return webView
     }
@@ -182,8 +183,45 @@ struct HTMLView: NSViewRepresentable {
                 do {
                     let config = try decoder.decode(ModbusConfig.self, from: jsonData)
                     
+                    var data = String();
                     switch (config.functionCode) {
                     case 1: // read coils
+                        
+                        if (modbus_set_slave(modbus.modbus, config.slaveId) == -1) {
+                            let cString = modbus_strerror(errno)!;
+                            let swiftString = String(cString: cString);
+                            data = "Set slave failed: \(swiftString)";
+                            
+                        } else {
+                            data = "Set slave returned 0.";
+                        }
+                        
+                        let script = "displayUserLog('\(data)');"
+                        webview.evaluateJavaScript(script) { result, error in
+                            if let error = error {
+                                print("Error: \(error.localizedDescription)")
+                            } else {
+                                print("Result: \(result ?? "")")
+                            }
+                        }
+                        
+                        var bits = [UInt8](repeating: 0, count: Int(config.numCoils))
+                        let rc = modbus_read_bits(modbus.modbus, config.startAddr, config.numCoils, &bits)
+                        
+                        print("bits: \(bits)");
+//                        if (rc < 0) { // an error occurred.
+//                            print("rc < 0")
+//                            break;
+//                        }
+//
+                        webview.evaluateJavaScript("displayUserLog('\(bits)');") { result, error in
+                            if let error = error {
+                                print("Error: \(error.localizedDescription)")
+                            } else {
+                                print("Result: \(result ?? "")")
+                            }
+                        }
+                        
                         break;
                     case 3: // read multiple holding reg.
                         break;
